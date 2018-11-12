@@ -1,0 +1,215 @@
+<template>
+<!-- Page, data-name contains page name which can be used in callbacks -->
+        <div class="page " > <!-- page-with-subnavbar -->
+        <!-- Top Navbar -->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="left">
+                        <a href="/panel-left/" class="link icon-only panel-open" data-panel="left">
+                            <i class="icon f7-icons ios-only">menu</i>
+                            <i class="icon material-icons md-only">menu</i>
+                          </a>
+                    </div>
+                    <div class="title sliding">{{@global.LANGUAGE.HOME_MSG00}}</div>
+                    <div class="right">
+                        <!-- <a href="#" class="link panel-open" data-panel="right">                
+                           Фильтр <i class="icon material-icons ">filter_list</i>
+                        </a>  -->
+                    </div>
+
+                   
+                </div>
+            </div>
+
+            <div class="toolbar no-shadow toolbar-bottom-md">
+                <div class="toolbar-inner row bottom-buttons-wrapper">                    
+                    <button @click="getQuestions" class="col button button-fill color-green ">{{@global.LANGUAGE.HOME_MSG05}}</button>
+                    <!-- <a href="/login-screen/" class="col button button-fill color-green">Start</a>  -->
+                </div>
+            </div>
+        
+            <!-- Scrollable page content-->
+            <div class="page-content">
+
+                <div class="list no-hairlines">
+                    <ul>                        
+                        <li class="item-content item-input ">
+                            <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-asset"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG01}}</div>
+                                <div class="item-input-wrap input-dropdown-wrap">
+                                  <select name="asset" placeholder="Please choose...">
+                                    <option value="Asset1">Asset1</option>
+                                    <option value="Asset2">Asset2</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input ">
+                            <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-checklist"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG02}}</div>
+                                <div class="item-input-wrap input-dropdown-wrap">
+                                  <select name="checklist" placeholder="Please choose...">
+                                    <option value="checklist1">checklist1</option>
+                                    <option value="checklist2">checklist2</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                {{@global.LANGUAGE.HOME_MSG03}}
+                                <div class="item-footer">{{@global.LANGUAGE.PROMPT_MSG000}}</div>
+                                </div>
+                                <div class="item-after">
+                                    <label class="toggle color-red">
+                                        <input type="checkbox" name="driving-car" checked="checked">
+                                        <span class="toggle-icon"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>                    
+                    </ul>
+                                        
+                </div>
+
+
+                
+                
+
+            </div>
+        </div>
+    </template>
+
+
+<script>
+  // script must return component object
+    return {
+        data: function () {
+            var ret = {};            
+            //app.methods.storageSetupTime();
+
+            return ret;
+        },
+        methods: {
+            
+            getQuestions: function(){
+                var self = this; 
+
+                /*app.dialog.progress();
+                app.request.get(API_URL.GET_QUESTIONS, {}, function (data, xhr, status) {  
+                    console.log(data);
+
+                    app.dialog.close();
+                },
+                function (xhr, status) {            
+                    app.dialog.close();
+                    //app.dialog.alert('Error occurred during get categories request!');
+                    app.dialog.alert('Error occured');             
+                },
+                'json');  */  
+
+                var questions = [
+                    'Check registration is current',
+                    'Drain condensation & contamination from all air tanks',
+                    'Check triangles & safety kit (first aid) are on/in the vehicle',
+                    /*'Check engine oil level, coolant level, washer water level, fuel level in tanks',
+                    'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
+                    'Check cab entry/exit steps & handles - check seats and seat belts',
+                    'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
+                    'Check all tyres for tread, damage & inflation - including spares',
+                    'Visually check wheels and wheel nuts and spare wheel carriers',
+                    'Check ALL lights, clearance lights, hazards, reflectors, lenses are intact & working',
+                    'Check wipers, washers, windows and mirrors are clean & operational',
+                    'Visually check chassis, suspension including air bags, check cab & body for damage',
+                    'Check warning devices',
+                    'Check trailer couplings for leaks - air / electrical / hydraulic (if applicable)',
+                    'Check that mudguards & mudflaps are securely fitted',
+                    'Check number plates are secure & intact',
+                    'ug test to ensure secure truck/trailer connection',
+                    'When commenced driving apply brakes at low speed to ensure operation & release',
+                    'Check Service Sticker is not overdue',*/
+                ];
+
+                questions.unshift('');
+
+                var params = {
+                    Name: 'Asset1',
+                    Questions: questions
+                };
+
+                mainView.router.navigate('/questions/', { context: params } );
+
+            }
+           /* getHotels: function (virtualList) {
+                var self = this; 
+
+                var hotels = app.methods.getFromStorage('hotels');
+
+                if (hotels && hotels.length > 0) {
+                    self.prepareFilters(hotels);
+                    if (virtualList.items.length === 0) {
+                        virtualList.appendItems(hotels);
+                    }else{
+                        virtualList.replaceAllItems(hotels);
+                    }
+                }else{   
+                    app.dialog.progress();
+                    app.request.get(API_URL.GET_HOTELS, {}, function (data, xhr, status) {  
+                        //console.log(data);
+
+                        app.methods.setInStorage({
+                            name: 'hotels',
+                            data: data
+                        });
+
+                        self.prepareFilters(data);
+
+                        if (virtualList.items.length === 0) {
+                            virtualList.appendItems(data);
+                        }else{
+                            virtualList.replaceAllItems(data);
+                        }
+
+                        app.dialog.close();
+                    },
+                    function (xhr, status) {            
+                        app.dialog.close();
+                        //app.dialog.alert('Error occurred during get categories request!');
+                        app.dialog.alert('Error occured');             
+                    },
+                    'json');    
+                }
+                
+                    
+            },*/
+        },
+       
+        on: {
+            pageInit: function (e, page) { 
+                var self = this;   
+                
+               
+                /*if (localStorage.ACCOUNT) {
+                    self.$app.methods.login();
+                }else{
+                    self.$app.methods.logout();
+                }*/
+               
+                
+            },     
+            pageAfterOut: function () {
+                // page has left the view
+            },
+
+            pageAfterIn: function() {
+                var self = this;   
+                console.log('here');
+
+                
+            }
+        }
+    };
+</script>

@@ -1,0 +1,154 @@
+var API_URL = {};
+API_URL.LOGIN = '';
+
+// Dom7
+var $$ = Dom7;
+
+// Framework7 App main instance
+var app  = new Framework7({
+    root: '#app', // App root element
+    id: 'com.sinopacific.prestart', // App bundle ID
+    name: 'PreStart', // App name
+    theme: 'auto', // Automatic theme detection
+    /*view: {
+        pushState: true,
+        pushStateRoot: document.location.pathname,
+    },*/
+    // App root data
+    data: function () {
+        return {
+            user: {
+                firstName: 'John',
+                lastName: 'Doe',
+            },
+        };
+    },
+    on: {
+        routerAjaxStart: function () {          
+            app.progressbar.show();
+        },
+        routerAjaxComplete: function () {           
+            app.progressbar.hide();
+        },
+        
+    },
+    // App root methods
+    methods: {
+        helloWorld: function () {
+            app.dialog.alert('Hello World!');
+        },
+        getFromStorage: function(name){
+            var ret = [];
+            var str = '';
+            if (name) {
+                switch (name){
+                    /*case 'hotels':
+                        str = localStorage.getItem("COM.UBS.HS.HOTELS");
+                        if(str) {
+                            ret = JSON.parse(str);
+                        }
+                        break;*/                
+
+                    default:
+                        app.dialog.alert('There is no item saved with such name - '+name);
+                }
+            }else{
+                app.dialog.alert('Wrong query parameters!');
+            }
+            return ret;
+        },
+        setInStorage: function(params){
+            if (typeof(params) == 'object' && params.name && params.data) {
+                switch (params.name){
+                    /*case 'hotels':
+                            localStorage.setItem("COM.UBS.HS.HOTELS", JSON.stringify(params.data));
+                        break;*/
+
+                    default:
+                        app.dialog.alert('There is no function associated with this name - '+params.name);
+                }   
+            }else{
+                app.dialog.alert('Wrong query parameters!');
+            }
+        },
+
+        logout: function(){
+            console.log('logout');
+            localStorage.ACCOUNT = '';
+            mainView.router.navigate('/login-screen/');
+        },
+        login: function(){
+
+            app.dialog.progress();
+            setTimeout(function(){
+                app.loginScreen.close();
+                app.dialog.close();
+                localStorage.ACCOUNT = 'Demo';
+            }, 1000);
+                    /*app.dialog.progress();
+                    app.request.get(API_URL.LOGIN, {}, function (data, xhr, status) { 
+                                             
+
+                        app.dialog.close();
+                    },
+                    function (xhr, status) {            
+                        app.dialog.close();
+                        //app.dialog.alert('Error occurred during get categories request!');
+                        app.dialog.alert('Error occured');             
+                    },
+                    'json');   */
+        },
+        createMap: function(option){
+            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { name: 'osm', attribution: '' });            
+            var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+                maxZoom: 22,
+                subdomains:['mt0','mt1','mt2','mt3']
+            });           
+            var googleSatelitte = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+            });  
+             
+            var map = L.map(option.target, { zoomControl: false, center: option.latLng, zoom: option.zoom, layers: [googleStreets] }); 
+                            
+            var layers = {
+                "<span class='mapSwitcherWrapper googleSwitcherWrapper'><img class='layer-icon' src='resources/images/googleRoad.png' alt='' /> <p>Map</p></span>": googleStreets,
+                "<span class='mapSwitcherWrapper satelliteSwitcherWrapper'><img class='layer-icon' src='resources/images/googleSatellite.png' alt='' />  <p>Satellite</p></span>": googleSatelitte,
+                "<span class='mapSwitcherWrapper openstreetSwitcherWrapper'><img class='layer-icon' src='resources/images/openStreet.png' alt='' /> <p>OpenStreet</p></span>": osm,                 
+            };           
+            
+            L.control.layers(layers).addTo(map);  
+
+            return map;
+        }
+    },
+
+    // App routes
+    routes: routes,
+});
+
+// Init/Create main view
+var mainView = app.views.create('.view-main', {
+    //url: app.view.pushStateRoot ? app.view.pushStateRoot : '/',
+    url: '/',
+
+    on: {
+        
+    }
+});
+
+$$('body').on('submit', '.login-form', function (e) {    
+    e.preventDefault();     
+    //preLogin(); 
+    app.methods.login();
+    return false;
+});
+
+/*$(function(){
+    if (localStorage.ACCOUNT) {
+        app.methods.login();
+    }else{
+        app.methods.logout();
+    }
+});
+*/

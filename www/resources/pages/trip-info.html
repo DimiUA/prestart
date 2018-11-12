@@ -1,0 +1,247 @@
+<template>
+<!-- Page, data-name contains page name which can be used in callbacks -->
+    <div class="page " > <!-- page-with-subnavbar -->
+    <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">{{@global.LANGUAGE.COM_MSG00}}</span>
+                    </a>
+                </div>
+                <div class="title sliding">{{@global.LANGUAGE.MENU_MSG01}}</div>
+                <div class="right">
+                    <a href="#" class="link playback-header-controls hide" >                
+                        <i class="icon-header-play "></i>
+                        <!-- <i class="icon-header-stop "></i> -->
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbar tabbar tabbar-custom">
+            <div class="toolbar-inner">              
+              <a href="#trip-info" class="tab-link tab-link-active">{{@global.LANGUAGE.TRIPS_MSG06}}</a>
+              <a href="#trip-playback" class="tab-link">{{@global.LANGUAGE.TRIPS_MSG07}}</a>              
+            </div>
+        </div>
+        
+        <div class="tabs-animated-wrap">
+            <div class="tabs">
+                <div class="page-content tab tab-active" id="trip-info">
+
+                    <div class="block-title block-title-custom">{{@global.LANGUAGE.TRIPS_MSG00}}</div> 
+                    <div class="block block-starts text-align-center">
+                        *Raiting*                            
+                    </div>             
+                    <div class="list">
+                        <ul>
+                            {{#TripStat}}
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-trip-distance "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG01}}</div>
+                                            {{Distance}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-trip-time "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG02}}</div>
+                                            {{Time}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-trip-speed "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG03}}</div>
+                                            {{MaxSpeed}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <!-- <i class="f7-icons icon-trip-speed "></i> -->
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG04}}</div>
+                                            {{AvargeSpeed}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-trip-fuel "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG05}}</div>
+                                            {{FuelUsed}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            {{/TripStat}}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="page-content tab" id="trip-playback">
+                    <div class="map-wrapper">
+                        <div id="map"></div>
+                    </div>
+                    <div class="bottom-info padding-top ">
+                        <div class="block margin-0">
+                            <div class="range-slider range-slider-init"
+                                data-min="1"
+                                data-max="100"
+                                data-step="1"                            
+                                data-value="1"
+                              ></div>
+                        </div>                    
+                        <div class="list no-hairlines no-hairlines-between margin-0">                       
+                            <ul class="display-flex justify-content-space-between" >
+                                {{#Playback}}
+                                <li>
+                                    <div class="item-content">                                                       
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG08}}</div>
+                                                {{Start}}
+                                            </div>                                
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="item-content">                                                       
+                                        <div class="item-inner">
+                                            <div class="item-title text-align-right">
+                                                <div class="item-header item-label">{{@global.LANGUAGE.TRIPS_MSG09}}</div>
+                                                {{Finish}}
+                                            </div>                                
+                                        </div>
+                                    </div>
+                                </li>
+                                {{/Playback}}
+                            </ul>
+                        </div>
+
+                        <div class="block margin-0">
+                            <div class="range-slider range-slider-init"
+                                data-min="1"
+                                data-max="100"
+                                data-step="1"                            
+                                data-value="1"
+                              ></div>
+                        </div>
+                        <div class="list no-hairlines no-hairlines-between margin-0">                       
+                            <ul class="display-flex justify-content-space-between" >                            
+                                <li>
+                                    <div class="item-content">                                                       
+                                        <div class="item-inner">
+                                            <div class="item-title">                                           
+                                                {{@global.LANGUAGE.TRIPS_MSG10}}
+                                            </div>                                
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="item-content">                                                       
+                                        <div class="item-inner">
+                                            <div class="item-title">                                           
+                                                {{@global.LANGUAGE.TRIPS_MSG11}}
+                                            </div>                                
+                                        </div>
+                                    </div>
+                                </li>                           
+                            </ul>
+                           
+                        </div>                    
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        
+   
+        
+
+            
+    </div>
+
+
+        
+</template>
+
+
+<script>
+  // script must return component object
+    return { 
+        data: function () {
+            var ret = {
+                TripStat: {
+                    Distance: 1200,
+                    Time: '8:56:23',
+                    MaxSpeed: '121 km/h',
+                    AvargeSpeed: '87 km/h',
+                    FuelUsed: '70 L',
+                },
+                Playback: {
+                    Start: '09.01.2018 1:34 PM ',
+                    Finish: '09.01.2018 4:54 PM',
+                }
+            };  
+            
+            return ret;
+        },
+
+        methods: { 
+            
+        },
+
+        on: {
+            pageInit: function (e, page) { 
+                var self = this; 
+                var MapTrack;
+                var playbackHeaderControls = page.$pageEl.find('.playback-header-controls');
+
+
+                var latlng = [50.449354, 30.523110];
+                MapTrack = self.$app.methods.createMap({ target: 'map', latLng: latlng, zoom: 15 });   
+                //window.PosMarker[asset].addTo(MapTrack);
+                
+                page.$pageEl.on('tab:show', function(e){ 
+                    if (e.target.id == 'trip-playback') {
+                        $$(playbackHeaderControls).removeClass('hide');
+                    }else{
+                        $$(playbackHeaderControls).addClass('hide');
+                    }
+                });
+            },   
+        }
+    };
+</script>
+    
