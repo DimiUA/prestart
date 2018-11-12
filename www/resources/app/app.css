@@ -45,6 +45,18 @@
 .ios .theme-dark.theme-dealer .page{
 	background: #333333;
 }
+.ios .theme-dark.theme-dealer .navbar:after, 
+.navbar.ios .theme-dark.theme-dealer:after{
+	background: transparent;
+}
+.ios .theme-dealer .tabbar-custom~* .page-content, 
+.ios .theme-dealer .tabbar-custom~.page-content{
+	padding-top: 88px;
+	padding-bottom: 0;
+}
+.ios .theme-dealer .tabbar-custom~* .page-content.with-bottom-button{
+	padding-bottom: 44px;
+}
 
 .ios .theme-dealer .list ul 
 {
@@ -85,7 +97,7 @@
 }
 .ios .theme-dealer .toolbar.tabbar-custom{
 	bottom: auto;
-	top: 0;
+	top: 44px;
 }
 .md .tabbar.tabbar-custom a.tab-link.tab-link-active{
 	color: #BC2132;
@@ -236,6 +248,9 @@
     color: #fff;
     font-size: 14px;
 
+}
+.ios .button-bottom-wrapper{
+	height: 44px;
 }
 	.button-bottom-content{
 		overflow: hidden;
