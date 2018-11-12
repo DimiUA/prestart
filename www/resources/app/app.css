@@ -81,8 +81,11 @@
 
 .md .theme-dealer .toolbar.tabbar-custom,
 .ios .theme-dealer .toolbar.tabbar-custom{
-	background: #fff;
-	
+	background: #fff;	
+}
+.ios .theme-dealer .toolbar.tabbar-custom{
+	bottom: auto;
+	top: 0;
 }
 .md .tabbar.tabbar-custom a.tab-link.tab-link-active{
 	color: #BC2132;
@@ -142,6 +145,10 @@
     transform-origin: 50% 100%;
 	display: block !important;
     background-color: rgba(255,255,255,.08);
+}
+
+.ios .theme-dealer .item-input .item-media{
+	min-width: 29px;
 }
 
 .bg-dark-grey{

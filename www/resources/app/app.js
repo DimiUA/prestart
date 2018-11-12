@@ -157,7 +157,7 @@ $$('body').on('submit', '.login-form', function (e) {
 document.addEventListener("deviceready", onDeviceReady, false ); 
 
 function onDeviceReady(){ 
-    AppDetails.appId = BuildInfo.packageName;
+    //AppDetails.appId = BuildInfo.packageName;
 
     //fix app images and text size
     if (window.MobileAccessibility) {
