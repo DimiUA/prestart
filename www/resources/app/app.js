@@ -152,3 +152,32 @@ $$('body').on('submit', '.login-form', function (e) {
     }
 });
 */
+
+
+document.addEventListener("deviceready", onDeviceReady, false ); 
+
+function onDeviceReady(){ 
+    AppDetails.appId = BuildInfo.packageName;
+
+    //fix app images and text size
+    if (window.MobileAccessibility) {
+        window.MobileAccessibility.usePreferredTextZoom(false);    
+    }
+    if (StatusBar) {
+        StatusBar.styleDefault();
+    } 
+   
+    document.addEventListener("backbutton", backFix, false); 
+    
+}
+
+
+function backFix(event){     
+    if (app.views.main.router.currentRoute.url == "/" ){ 
+        app.dialog.confirm(LANGUAGE.PROMPT_MSG006, function () {        
+            navigator.app.exitApp();
+        });
+    }else{
+        mainView.router.back();
+    } 
+}

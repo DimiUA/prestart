@@ -15,6 +15,7 @@ window.LanguagePackages= {
 		"PROMPT_MSG003": "IMPORTANT: You will not be able to start a new trip if you do not close the previous one.",
 		"PROMPT_MSG004": "Start trip?",
 		"PROMPT_MSG005": "You have no Trips yet.",
+		"PROMPT_MSG006": "Are you sure you want to close the application?",
 
 
 		"HOME_MSG00": "Home",
