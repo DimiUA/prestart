@@ -402,7 +402,18 @@
 .ios .bottom-info .list .item-title{
 	font-size: 15px;
 }
+	.gauge-raiting{
+		margin: 32px auto 0;
+	    width: 240px;
+	        /* height: 160px; */
+		box-sizing: border-box;
+	}
+	.block-starts{
 
+	}
+		.block-starts i{
+			margin: 0 4px;
+		}
 /* MAP */
 
 .leaflet-control-layers:not(.leaflet-control-layers-expanded){
