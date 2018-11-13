@@ -19,11 +19,11 @@
             </div>
         </div>
 
-        <div class="toolbar no-shadow toolbar-bottom-md">
+        <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
             <div class="toolbar-inner row bottom-buttons-wrapper">                    
-                <button @click="showPopupFault" class="col button button-fill color-red">{{@global.LANGUAGE.QUESTIONS_MSG00}}</button>
-                <button class="col button button-fill color-orange nextQuestion" data-state="2">{{@global.LANGUAGE.QUESTIONS_MSG01}}</button>
-                <button class="col button button-fill color-green nextQuestion" data-state="1">{{@global.LANGUAGE.QUESTIONS_MSG02}}</button>
+                <button @click="showPopupFault" class="col button button-fill button-big color-red">{{@global.LANGUAGE.QUESTIONS_MSG00}}</button>
+                <button class="col button button-fill button-big color-orange nextQuestion" data-state="2">{{@global.LANGUAGE.QUESTIONS_MSG01}}</button>
+                <button class="col button button-fill button-big color-green nextQuestion" data-state="1">{{@global.LANGUAGE.QUESTIONS_MSG02}}</button>
             </div>
         </div>
         
@@ -35,7 +35,7 @@
                     <p><span data-progress="{{QuestionProgress}}" class="progressbar" id="question-progressbar"></span></p>
                 </div>
             </div>
-            <div class="question-wrapper display-flex justify-content-center align-items-center" >
+            <div class="question-wrapper display-flex justify-content-center align-items-center text-align-center size-20" >
                 <p>
                     {{Question}}
                 </p>
@@ -205,9 +205,9 @@
                                             <div class="title">` + name + `</div>                              
                                         </div>
                                     </div>
-                                    <div class="toolbar no-shadow toolbar-bottom-md">
+                                    <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
                                         <div class="toolbar-inner row bottom-buttons-wrapper">                    
-                                            <button type="submit" class="col button button-fill color-green">` + LANGUAGE.COM_MSG01 + `</button>                               
+                                            <button type="submit" class="col button button-fill button-big color-green">` + LANGUAGE.COM_MSG01 + `</button>                               
                                         </div>
                                     </div>
                                     <div class="page-content">
@@ -297,9 +297,9 @@
                                             </div>                              
                                         </div>
                                     </div>
-                                    <div class="toolbar no-shadow toolbar-bottom-md">
+                                    <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
                                         <div class="toolbar-inner row bottom-buttons-wrapper">                    
-                                            <button class="col button button-fill color-green submitChecklist">` + LANGUAGE.COM_MSG02 + `</button>                               
+                                            <button class="col button button-fill button-big color-green submitChecklist">` + LANGUAGE.COM_MSG02 + `</button>                               
                                         </div>
                                     </div>
                                     <div class="page-content">
