@@ -31,7 +31,7 @@ routes = [
          
     },
     {
-        path: '/trip-info/:raiting/',
+        path: '/trip-info/:raiting/:name/',
         componentUrl: './resources/pages/trip-info.html',
         name: 'trip-info',
          

@@ -10,7 +10,7 @@
                         <span class="ios-only">{{@global.LANGUAGE.COM_MSG00}}</span>
                     </a>
                 </div>
-                <div class="title sliding">{{@global.LANGUAGE.MENU_MSG01}}</div>
+                <div class="title sliding">{{Name}}</div>
                 <div class="right">
                     <a href="#" class="link playback-header-controls hide" >                
                         <i class="icon-header-play "></i>
@@ -215,6 +215,7 @@
     return { 
         data: function () {
             var ret = {
+                Name: 'Asset1',
                 TripStat: {
                     Raiting: '6',
                     Stars: {},                    
@@ -231,6 +232,7 @@
                 Gauge: {}
             };  
 
+            ret.Name = this.$route.params.name;
             ret.TripStat.Raiting = this.$route.params.raiting;
 
             ret.TripStat.Stars = this.$app.methods.getStars(ret.TripStat.Raiting);

@@ -184,7 +184,7 @@
                 questions.unshift('');
 
                 var params = {
-                    Name: 'Asset1',
+                    Name: 'Asset3',
                     Questions: questions
                 };
 
@@ -196,7 +196,7 @@
 
                 var params = {};
 
-                mainView.router.navigate('/trip-info/8/', { context: params } );
+                mainView.router.navigate('/trip-info/8/Asset3/', { context: params } );
                 localStorage.TripStarted = 0;
             },
            /* getHotels: function (virtualList) {
@@ -267,7 +267,7 @@
                     self.$setState({
                         TripStarted: tripStarted,
                         Trip: {
-                            AssetName: 'Asset1',
+                            AssetName: 'Asset3',
                             StartTime: '20/10/2018 12:34:45',
                         }
                     });
