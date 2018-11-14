@@ -189,7 +189,7 @@ var app  = new Framework7({
             return ret;
         },
         getBooleanVal: function(val){
-            return JSON.parse(val.toLowerCase());
+            return  val ? JSON.parse(val.toLowerCase()) : '';
         },
     },
 
