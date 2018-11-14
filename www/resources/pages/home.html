@@ -22,23 +22,67 @@
             </div>
 
             <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
-                <div class="toolbar-inner row bottom-buttons-wrapper">                    
-                    <button @click="getQuestions" class="col button button-fill button-big color-green ">{{@global.LANGUAGE.HOME_MSG05}}</button>
-                    <!-- <a href="/login-screen/" class="col button button-fill color-green">Start</a>  -->
+                <div  class="toolbar-inner row bottom-buttons-wrapper">
+                    {{#if TripStarted}}
+                    <button key="ButtonFinishTrip" @click="finishTrip" class="col button button-fill button-big color-red ">{{@global.LANGUAGE.COM_MSG06}}</button>
+                    {{else}}
+                    <button key="ButtonStartQuestions" @click="getQuestions" class="col button button-fill button-big color-green ">{{@global.LANGUAGE.COM_MSG05}}</button>
+                    {{/if}} 
                 </div>
             </div>
         
             <!-- Scrollable page content-->
-            <div class="page-content">
+            <div class="page-content">                
+                
+                {{#if TripStarted}}
 
-                <div class="list no-hairlines">
+                <div key="BlockSelectedVehicle">
+                   <div class="block-title ">{{@global.LANGUAGE.HOME_MSG05}}</div>
+                    <div class="list no-hairlines">
+                        <ul>
+                            {{#Trip}}
+                            
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-other-asset "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.HOME_MSG06}}</div>
+                                            {{AssetName}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-other-date "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.HOME_MSG07}}</div>
+                                            {{StartTime}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            {{/Trip}}
+                        </ul>
+                    </div>
+                </div>
+
+                {{else}}
+
+                <div key="BlockSelectChecklist" class="list no-hairlines">
                     <ul>                        
                         <li class="item-content item-input ">
                             <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-asset"></i></div>
                             <div class="item-inner">
                                 <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG01}}</div>
                                 <div class="item-input-wrap input-dropdown-wrap">
-                                  <select name="asset" placeholder="Please choose...">
+                                  <select name="asset" placeholder="Please choose..." >
                                     <option value="Asset1">Asset1</option>
                                     <option value="Asset2">Asset2</option>
                                   </select>
@@ -71,9 +115,10 @@
                                 </div>
                             </div>
                         </li>                    
-                    </ul>
-                                        
+                    </ul>                                        
                 </div>
+
+                {{/if}}
 
 
                 
@@ -88,8 +133,11 @@
   // script must return component object
     return {
         data: function () {
+            var self = this;
             var ret = {};            
             //app.methods.storageSetupTime();
+
+            ret.TripStarted = self.$app.methods.getBooleanVal(localStorage.TripStarted);
 
             return ret;
         },
@@ -116,7 +164,7 @@
                     'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
                     'Check cab entry/exit steps & handles - check seats and seat belts',
                     'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
-                    'Check registration is current',
+                    /*'Check registration is current',
                     'Drain condensation & contamination from all air tanks',
                     'Check triangles & safety kit (first aid) are on/in the vehicle',
                     'Check all tyres for tread, damage & inflation - including spares',
@@ -130,7 +178,7 @@
                     'Check number plates are secure & intact',
                     'ug test to ensure secure truck/trailer connection',
                     'When commenced driving apply brakes at low speed to ensure operation & release',
-                    'Check Service Sticker is not overdue',
+                    'Check Service Sticker is not overdue',*/
                 ];
 
                 questions.unshift('');
@@ -142,7 +190,15 @@
 
                 mainView.router.navigate('/questions/', { context: params } );
 
-            }
+            }, 
+            finishTrip: function(){
+                var self = this; 
+
+                var params = {};
+
+                mainView.router.navigate('/trip-info/8/', { context: params } );
+                localStorage.TripStarted = 0;
+            },
            /* getHotels: function (virtualList) {
                 var self = this; 
 
@@ -203,11 +259,34 @@
             pageAfterOut: function () {
                 // page has left the view
             },
+            pageBeforeIn: function(){
+                var self = this;  
+                var tripStarted = self.$app.methods.getBooleanVal(localStorage.TripStarted);
 
-            pageAfterIn: function() {
-                var self = this;   
-                console.log('here');
+                if (tripStarted) {
+                    self.$setState({
+                        TripStarted: tripStarted,
+                        Trip: {
+                            AssetName: 'Asset1',
+                            StartTime: '20/10/2018 12:34:45',
+                        }
+                    });
+                }else{
+                    self.$setState({
+                        TripStarted: tripStarted,
+                    });
+                }
+                
+                    
+            },
+            pageAfterIn: function(e, page) {
+                
+               // console.log('here');
+                //if (1) {
+                    
+                //}else{
 
+                //}
                 
             }
         }

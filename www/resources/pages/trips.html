@@ -21,28 +21,17 @@
         
         <!-- Scrollable page content-->
         <div class="page-content">                
-            <div class="list no-hairlines">
-                <ul>
-                    <!-- <li>
-                        <a href="#" class="item-link item-content">                       
-                            <div class="item-inner">
-                                <div class="item-title">
-                                    <div class="item-header">20/10/10 12:34:12</div>
-                                    DAF 5687AS
-                                </div>
-                                <div class="item-after">*raiting*</div>
-                            </div>
-                        </a>
-                    </li> -->
+            <div class="list no-hairlines list-trip-history">
+                <ul>                    
                     {{#each Trips}}
                     <li>
-                        <a href="/trip-info/" class="item-link item-content">                       
+                        <a href="/trip-info/{{Raiting}}/" class="item-link item-content">                       
                             <div class="item-inner">
                                 <div class="item-title">
                                     <div class="item-header item-label">{{Date}}</div>
                                     {{AssetName}}
                                 </div>
-                                <div class="item-after">*raiting*</div>
+                                <div class="item-after block-starts ">{{Stars.Template}}</div>
                             </div>
                         </a>
                     </li>
@@ -50,7 +39,6 @@
                     <li class="block">
                         <p>{{@global.LANGUAGE.PROMPT_MSG005}}</p>
                     </li>
-
                     {{/each}}
                 </ul>
             </div>
@@ -76,7 +64,7 @@
                 {
                     Date: '20/10/10 12:34:12',
                     AssetName: 'DAF 5687AS',
-                    Raiting: '4',
+                    Raiting: '9',
                 },
                 {
                     Date: '20/10/10 12:34:12',
@@ -86,10 +74,13 @@
                 {
                     Date: '20/10/10 12:34:12',
                     AssetName: 'DAF 5231BG',
-                    Raiting: '5',
-                }
-                
+                    Raiting: '6',
+                }                
             ];
+
+            for (var i = tripsListArry.length - 1; i >= 0; i--) {                
+                tripsListArry[i].Stars = this.$app.methods.getStars(tripsListArry[i].Raiting);
+            }
 
             ret.Trips = tripsListArry;
 

@@ -120,7 +120,77 @@ var app  = new Framework7({
             L.control.layers(layers).addTo(map);  
 
             return map;
-        }
+        },
+        getStars: function (Raiting){
+            var ret = {
+                Value: 0,
+                Template: '',
+                Color: '',
+            };
+
+            switch(true) {
+                case ( Raiting >= 9 ):
+                    ret.Value = 5;
+                    ret.Color = 'text-color-green';
+                    break;
+
+                case ( Raiting >= 7 ):
+                    ret.Value = 4;
+                    ret.Color = 'text-color-green';
+                    break;
+
+                case ( Raiting >= 5 ):
+                    ret.Value = 3;
+                    ret.Color = 'text-color-orange';
+                    break;
+
+                case ( Raiting >= 3 ):
+                    ret.Value = 2;
+                    ret.Color = 'text-color-red';
+                    break;
+
+                default:
+                    ret.Value = 1;
+                    ret.Color = 'text-color-red';
+            } 
+            /*for (var i = ret.Value; i >= 1; i--) {
+                ret.Template += '<i class="f7-icons icon-trip-star"></i>';
+            }*/
+            for (var i = 1; i <= 5; i++) {
+                if (i <= ret.Value) {
+                    ret.Template += '<i class="f7-icons icon-trip-star ' + ret.Color + '"></i>';
+                }else{
+                    ret.Template += '<i class="f7-icons icon-trip-star text-color-gray"></i>';
+                }
+                
+            }
+
+            return ret;
+        },
+        getGaugeRaitingDetails: function(Raiting){
+            var ret = {
+                Value: 0,
+                BorderColor: '#BC2132',
+                Raiting: 0,
+            };
+
+            ret.Raiting = Raiting;
+            ret.Value = Raiting / 10;
+            switch(true) {
+                case ( Raiting >= 8 ):
+                    ret.BorderColor = '#39B54A';
+                    break;
+
+                case ( Raiting >= 5 ):
+                    ret.BorderColor = '#F7931E';
+                    break;
+            } 
+
+            return ret;
+        },
+        getBooleanVal: function(val){
+            return JSON.parse(val.toLowerCase());
+        },
     },
 
     // App routes

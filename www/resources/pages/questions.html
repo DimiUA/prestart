@@ -118,7 +118,8 @@
                         {
                             text: LANGUAGE.COM_MSG04,
                             onClick: function () { 
-                                mainView.router.back({name: 'home'},{force: true});
+                                
+                                mainView.router.back('/',{force: true});
                                 if (params && params.popup) {
                                     params.popup.close();
                                 }
@@ -126,8 +127,10 @@
                         },
                         {
                             text: LANGUAGE.COM_MSG03,                            
-                            onClick: function () {                                
-                                mainView.router.back({name: 'home'},{force: true});
+                            onClick: function () { 
+                                localStorage.TripStarted = 1;      
+
+                                mainView.router.back('/',{force: true});
                                 if (params && params.popup) {
                                     params.popup.close();
                                 }
@@ -361,11 +364,12 @@
                 popup.close();
                 self.nextQuestion();
             },
-            submitChecklist: function(){
+            /*submitChecklist: function(){
                 var self = this;
 
+
                 //self.promptStartTrip();
-            }, 
+            }, */
 
         },
 

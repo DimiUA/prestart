@@ -45,9 +45,8 @@
                     </div>
                     {{/Gauge}}
                     <div class="block-title block-title-custom margin-top">{{@global.LANGUAGE.TRIPS_MSG00}}</div> 
-                    <div class="block block-starts text-align-center {{TripStat.Stars.Color}}">
-                       <!--  *Raiting*        -->               
-                           {{TripStat.Stars.Template}}
+                    <div class="block block-starts text-align-center">                             
+                        {{TripStat.Stars.Template}}
                     </div>             
                     <div class="list">
                         <ul>
@@ -217,12 +216,8 @@
         data: function () {
             var ret = {
                 TripStat: {
-                    Raiting: '8',
-                    Stars: {
-                        Value: 0,
-                        Template: '',
-                        Color: '',
-                    },                    
+                    Raiting: '6',
+                    Stars: {},                    
                     Distance: 1200,
                     Time: '8:56:23',
                     MaxSpeed: '121 km/h',
@@ -233,56 +228,14 @@
                     Start: '09.01.2018 1:34 PM ',
                     Finish: '09.01.2018 4:54 PM',
                 },
-                Gauge: {
-                    Value: 0,
-                    BorderColor: '#BC2132',
-                    Raiting: 0,
-                }
+                Gauge: {}
             };  
 
+            ret.TripStat.Raiting = this.$route.params.raiting;
+
+            ret.TripStat.Stars = this.$app.methods.getStars(ret.TripStat.Raiting);
+            ret.Gauge = this.$app.methods.getGaugeRaitingDetails(ret.TripStat.Raiting);               
             
-            
-            switch(true) {
-                case ( ret.TripStat.Raiting >= 9 ):
-                    ret.TripStat.Stars.Value = 5;
-                    ret.TripStat.Stars.Color = 'text-color-green';
-                    break;
-
-                case ( ret.TripStat.Raiting >= 7 ):
-                    ret.TripStat.Stars.Value = 4;
-                    ret.TripStat.Stars.Color = 'text-color-green';
-                    break;
-
-                case ( ret.TripStat.Raiting >= 5 ):
-                    ret.TripStat.Stars.Value = 3;
-                    ret.TripStat.Stars.Color = 'text-color-orange';
-                    break;
-
-                case ( ret.TripStat.Raiting >= 3 ):
-                    ret.TripStat.Stars.Value = 2;
-                    ret.TripStat.Stars.Color = 'text-color-red';
-                    break;
-
-                default:
-                    ret.TripStat.Stars.Value = 1;
-                    ret.TripStat.Stars.Color = 'text-color-red';
-            } 
-            for (var i = ret.TripStat.Stars.Value; i >= 1; i--) {
-                ret.TripStat.Stars.Template += '<i class="f7-icons icon-trip-star"></i>';
-            }
-                
-            ret.Gauge.Raiting = ret.TripStat.Raiting;
-            ret.Gauge.Value = ret.TripStat.Raiting / 10;
-            switch(true) {
-                case ( ret.TripStat.Raiting >= 8 ):
-                    ret.Gauge.BorderColor = '#39B54A';
-                    break;
-
-                case ( ret.TripStat.Raiting >= 5 ):
-                    ret.Gauge.BorderColor = '#F7931E';
-                    break;
-            } 
-
             return ret;
         },
 
@@ -309,40 +262,7 @@
                     }
                 });
 
-                /*if (self.TripStat.Raiting >= 8 ) {
-
-                }else if(self.TripStat.Raiting >= 5){
-
-                }else{
-
-                }*/
-                /*var gaugeBorderColor = '#BC2132';
-                switch(true) {
-                    case ( self.TripStat.Raiting >= 8 ):
-                        gaugeBorderColor = '#39B54A';
-                        break;
-
-                    case ( self.TripStat.Raiting >= 5 ):
-                        gaugeBorderColor = '#F7931E';
-                        break;
-                }               
-
-                var gauge = app.gauge.create({
-                    el: '.gauge-raiting .gauge',
-                    type: 'semicircle', 
-                    value:  self.TripStat.Raiting / 10,
-                    borderBgColor: '#8e8e93',
-                    borderColor: '#F7931E',
-                    valueText: self.TripStat.Raiting,
-                    valueTextColor: '#fff',
-                    labelText: 'of 10 points',
-                    labelTextColor: '#8e8e93',
-                    on: {
-                        beforeDestroy: function () {
-                          console.log('Gauge will be destroyed');
-                        }
-                    }
-                });*/
+                
             },   
         }
     };

@@ -174,7 +174,7 @@
     background-color: rgba(255,255,255,.08);
 }
 
-.ios .theme-dealer .item-input .item-media{
+.ios .theme-dealer .item-content .item-media{
 	min-width: 29px;
 }
 
@@ -366,6 +366,7 @@
 			height: 100%;
 			overflow: hidden;
     		background: url('../images/other-image.svg') no-repeat center center;	
+    		background-size: 120px;
 		}
 		.top-img-load-button{
 			position: absolute;
@@ -383,6 +384,16 @@
 
 /* TRIPS */
 
+.list-trip-history{
+
+}
+	.list-trip-history .item-after.block-starts i{
+		font-size: 14px;
+		margin: 0 2px;
+	}
+	.ios .list-trip-history .item-after.block-starts i{
+		font-size: 15px;
+	}
 .map-wrapper{	
 	min-height: 250px;
 	height: 250px;

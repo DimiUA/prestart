@@ -7,7 +7,9 @@ window.LanguagePackages= {
 		"COM_MSG01": "Save",
 		"COM_MSG02": "Submite",
 		"COM_MSG03": "Yes",
-		"COM_MSG04": "No",		
+		"COM_MSG04": "No",
+		"COM_MSG05": "Start",	
+		"COM_MSG06": "Finish",			
 
 		"PROMPT_MSG000": "Activate this option if you are currently driver of selected asset",
 		"PROMPT_MSG001": "Quit from this checklist?",
@@ -23,7 +25,9 @@ window.LanguagePackages= {
 		"HOME_MSG02": "Select Checklist",
 		"HOME_MSG03": "Driving This Car",
 		"HOME_MSG04": "Do not start trip",
-		"HOME_MSG05": "Start",
+		"HOME_MSG05": "Current Trip",
+		"HOME_MSG06": "Vehicle Name",
+		"HOME_MSG07": "Started",
 
 		"LOGIN_MSG01": "The login(email) or password you entered is incorrect.",
 		"LOGIN_MSG02": "Login Name / Email",
