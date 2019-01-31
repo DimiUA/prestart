@@ -159,12 +159,27 @@
                 },
                 'json');  */  
 
-                var questions = [                    
-                    'Check engine oil level, coolant level, washer water level, fuel level in tanks',
-                    'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
-                    'Check cab entry/exit steps & handles - check seats and seat belts',
-                    'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
-                    /*'Check registration is current',
+                var questions = [        
+                    {
+                        question: 'Check engine oil level, coolant level, washer water level, fuel level in tanks',
+                        images: '',
+                    },
+                    {
+                        question: 'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
+                        images: ['http://oi67.tinypic.com/2evyh3k.jpg','http://oi64.tinypic.com/2eamloy.jpg'],
+                    },
+                    {
+                        question: 'Check cab entry/exit steps & handles - check seats and seat belts',
+                        images: ['http://oi64.tinypic.com/2eamloy.jpg'],
+                    },
+                    {
+                        question: 'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
+                        images: [],
+                    },
+                   
+                ];
+
+                 /*'Check registration is current',
                     'Drain condensation & contamination from all air tanks',
                     'Check triangles & safety kit (first aid) are on/in the vehicle',
                     'Check all tyres for tread, damage & inflation - including spares',
@@ -179,10 +194,20 @@
                     'ug test to ensure secure truck/trailer connection',
                     'When commenced driving apply brakes at low speed to ensure operation & release',
                     'Check Service Sticker is not overdue',*/
-                ];
 
-                questions.unshift('');
+                
+                //var questions = [];
 
+                if (questions && questions.length) {
+                    for (var i = questions.length - 1; i >= 0; i--) {
+                        if (questions[i].images && questions[i].images.length === 0) {
+                            questions[i].images = '';
+                        }                        
+                    }
+                }else{
+                    questions = '';
+                }
+             
                 var params = {
                     Name: 'Asset3',
                     Questions: questions

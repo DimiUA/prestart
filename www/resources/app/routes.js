@@ -54,11 +54,7 @@ routes = [
         name: 'user-settings',
          
     },
-    /*{
-        name: 'hotel',
-        path: '/hotel/:id/',
-        componentUrl: './resources/pages/hotel.html',
-    },*/  
+   
   
  
   

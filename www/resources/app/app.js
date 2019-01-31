@@ -15,6 +15,9 @@ var app  = new Framework7({
         pushStateRoot: document.location.pathname,
     },*/
     // App root data
+    preroute: function (view, options) {
+        console.log('preroute');
+    },
     data: function () {
         return {
             user: {

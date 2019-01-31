@@ -1,9 +1,11 @@
 <template>
-    <div class="page "> 
+<!-- Page, data-name contains page name which can be used in callbacks -->
+    <div class="page " data-question-number="{{QuestionNumber}}"> <!-- page-with-subnavbar -->
+    <!-- Top Navbar -->
         <div class="navbar">
             <div class="navbar-inner">
                 <div class="left">
-                    <a href="#"  @click="promptQuit" class="link">
+                    <a href="#" @click="prevQuestion" class="link">
                         <i class="icon icon-back"></i>
                         <span class="ios-only">{{@global.LANGUAGE.COM_MSG00}}</span>
                     </a>
@@ -18,56 +20,26 @@
         </div>
 
         <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
-            <div  class="toolbar-inner row bottom-buttons-wrapper">  
-                <button key="ButtonShowPopupSummary" @click="showPopupSummary" class="col button button-fill button-big color-green {{#unless AllAnswered}} disabled {{/unless}}">{{@global.LANGUAGE.COM_MSG10}}</button>
+            <div class="toolbar-inner row bottom-buttons-wrapper">                    
+                <button @click="showPopupFault" class="col button button-fill button-big color-red">{{@global.LANGUAGE.QUESTIONS_MSG00}}</button>
+                <button class="col button button-fill button-big color-orange nextQuestion" data-state="2">{{@global.LANGUAGE.QUESTIONS_MSG01}}</button>
+                <button class="col button button-fill button-big color-green nextQuestion" data-state="1">{{@global.LANGUAGE.QUESTIONS_MSG02}}</button>
             </div>
-        </div>  
-
-        <div class="page-content">
-            <div class="list media-list no-hairlines">
-                <ul>
-                    {{#if Questions}}
-                        {{#Questions}}
-                        <li>
-                            <div class="item-content" >
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title"></div>
-                                        <div class="item-after">
-                                            {{#if images}}
-                                                <a  href="#" class="link color-blue showImages" data-images = "{{images}}"> {{@global.LANGUAGE.COM_MSG08}}</a>
-                                            {{else}}
-                                                {{@global.LANGUAGE.COM_MSG07}}                                           
-                                            {{/if}}
-                                        </div>
-                                    </div>
-                                    <div class="item-text text-color-white">                                    
-                                        {{question}}
-                                    </div>  
-                                    <div class="item-text margin-top">
-                                        <div class="row" data-question-index="{{@index}}">
-                                            <button class="col button button-fill color-red question-button showPopupFault">{{@global.LANGUAGE.QUESTIONS_MSG00}}</button>
-                                            <button class="col button button-fill color-orange question-button " data-state="2">{{@global.LANGUAGE.QUESTIONS_MSG01}}</button>
-                                            <button class="col button button-fill color-green question-button " data-state="1">{{@global.LANGUAGE.QUESTIONS_MSG02}}</button>
-                                        </div> 
-                                    </div> 
-                                </div>
-                            </div>
-                        </li>
-                        {{/Questions}}
-                    {{else}}
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">                       
-                                <div class="item-title">
-                                    {{@global.LANGUAGE.COM_MSG09}} 
-                                </div> 
-                            </div>                                
-                        </div>                            
-                    </li>
-                    {{/if}}
-                </ul>
+        </div>
+        
+        <!-- Scrollable page content-->
+        <div class="page-content">                
+            <div class="block question-top-progress with-border-bottom">
+                <p>{{@global.LANGUAGE.QUESTIONS_MSG05}} {{QuestionNumber}} {{@global.LANGUAGE.QUESTIONS_MSG06}} {{QuestionCount}}</p>
+                <div>
+                    <p><span data-progress="{{QuestionProgress}}" class="progressbar" id="question-progressbar"></span></p>
+                </div>
             </div>
+            <div class="question-wrapper display-flex justify-content-center align-items-center text-align-center size-20" >
+                <p>
+                    {{Question}}
+                </p>
+            </div> 
         </div>
 
             
@@ -87,16 +59,29 @@
             //console.log(self);
             var ret = {
                 //Questions: null,
-                
+                Question: null,
+                QuestionNumber: 1,
+                QuestionCount: 1,
+                QuestionProgress: 1,
                 Answers: {},
-                AllAnswered: false,
             };   
            
-           
+            if (context.Questions && context.Questions.length) {
+                ret.QuestionCount = context.Questions.length - 1;
+                ret.Question = context.Questions[1];
+                ret.QuestionProgress = parseInt(1 / ret.QuestionCount * 100);
+            }
+
             return ret;
         },
         methods: {
-            promptQuit: function(params){               
+            promptQuit: function(params){
+                /*app.dialog.confirm(LANGUAGE.PROMPT_MSG001, function () { 
+                    mainView.router.back();
+                    if (params && params.popup) {
+                        params.popup.close();
+                    }
+                });*/
                 var self = this;
                 var modalTex = '<div class="color-red custom-modal-title">'+ self.Name +'</div>' +
                     '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG001 +'</div>';   
@@ -123,92 +108,109 @@
             },
             promptStartTrip: function(params){
                 var self = this;
-                /*var modalTex = '<div class="color-red custom-modal-title">'+ self.Name +'</div>' +
-                    '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG004 +'</div>';   */
-                var modalTex = `
-                    <div class="custom-modal-text margin-bottom">${ LANGUAGE.PROMPT_MSG004 }</div>
-                    <div class="list no-margin  text-color-black">
-                        <ul>
-                            <li>
-                                <label class="item-radio item-content">
-                                    <input type="radio" name="trip-type" value="business"  checked/>
-                                    <i class="icon icon-radio"></i>
-                                    <div class="item-inner">
-                                        <div class="item-title">${ LANGUAGE.QUESTIONS_MSG12 }</div>
-                                    </div>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="item-radio item-content">
-                                    <input type="radio" name="trip-type" value="personal"  />
-                                    <i class="icon icon-radio"></i>
-                                    <div class="item-inner">
-                                        <div class="item-title">${ LANGUAGE.QUESTIONS_MSG11 }</div>
-                                    </div>
-                                </label>
-                            </li>                            
-                            <li>
-                                <label class="item-radio item-content">
-                                    <input type="radio" name="trip-type" value="diagnostic"  />
-                                    <i class="icon icon-radio"></i>
-                                    <div class="item-inner">
-                                        <div class="item-title">${ LANGUAGE.QUESTIONS_MSG13 }</div>
-                                    </div>
-                                </label>
-                            </li>                 
-                        </ul>
-                    </div>
-                `;                 
-                app.dialog.create({
+                var modalTex = '<div class="color-red custom-modal-title">'+ self.Name +'</div>' +
+                    '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG004 +'</div>';   
+                //var modalTex = '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG004 +'</div>';                         
+                var dialog = app.dialog.create({
                        title: '<div class="custom-modal-logo-wrapper"><img class="custom-modal-logo" src="resources/images/logo-dark.png" alt=""/></div>',
                         text: modalTex,                                
                      buttons: [
                         {
-                            text: LANGUAGE.COM_MSG11,
-                            color: 'red',
-                            onClick: function (dialog) { 
-                                console.log(dialog);
-                                var tripType = dialog.$el.find('input[name="trip-type"]:checked').val();
-                                if (tripType != 'diagnostic') {
-                                    localStorage.TripStarted = 1;  
-                                }
+                            text: LANGUAGE.COM_MSG04,
+                            onClick: function () { 
                                 
                                 mainView.router.back('/',{force: true});
                                 if (params && params.popup) {
                                     params.popup.close();
                                 }
                             }
-                        }
-                        
+                        },
+                        {
+                            text: LANGUAGE.COM_MSG03,                            
+                            onClick: function () { 
+                                localStorage.TripStarted = 1;      
+
+                                mainView.router.back('/',{force: true});
+                                if (params && params.popup) {
+                                    params.popup.close();
+                                }
+                            }
+                        },
                     ]
-                }).open();                 
-            },               
-            showPopupFault: function(questionIindex){
+                }); 
+                dialog.open();   
+            },
+            nextQuestion: function(){
                 var self = this;
-                //var name = self.Name;
+                var page = $$(self.$router.currentPageEl);
+                var questionCount = self.QuestionCount;
+                var progressbarVal = 1;
+                var progressbar = page.find('.progressbar');
+                var curntNumber = page.data('question-number');                
+                var newNumber = parseInt(curntNumber) + 1;
 
-                var question = self.Answers[questionIindex];              
+               // console.log(self);
+                
+                if ( newNumber <= questionCount ) {
+                	self.$setState({
+	                    QuestionNumber: newNumber,
+	                    Question: self.Questions[newNumber],
+	                });
+                	progressbarVal = parseInt(newNumber / questionCount * 100);
+                	self.$app.progressbar.set(progressbar, progressbarVal);
+                }else{
+                	//self.$app.dialog.alert('next Screen');
+                    self.showPopupSummary();
+                }
+	                
 
-                app.popup.create({
-                    //closeByBackdropClick: false,
+            },
+            prevQuestion: function(){
+            	var self = this;
+            	var page = $$(self.$router.currentPageEl);
+            	var questionCount = self.QuestionCount;
+            	var progressbarVal = 1;
+            	var progressbar = page.find('.progressbar');
+                var curntNumber = page.data('question-number');  
+
+            	var newNumber = parseInt(curntNumber) - 1;
+
+            	if (newNumber > 0) {
+            		self.$setState({
+	                    QuestionNumber: newNumber,
+	                    Question: self.Questions[newNumber],
+	                });
+	                progressbarVal = parseInt(newNumber / questionCount * 100);
+	                self.$app.progressbar.set(progressbar, progressbarVal);
+            	}else{
+            		self.promptQuit();
+            	}
+
+	            	
+            }, 
+            showPopupFault: function(){
+                var self = this;
+                var name = self.Name;
+
+                var dynamicPopup = app.popup.create({
                     content: 
                         `<div class="popup fault-popup">
                             <div class="view">
-                                <form class="page faultForm" data-question-index="${ questionIindex }">
+                                <form class="page faultForm">
                                     <div class="navbar">
                                         <div class="navbar-inner">
                                             <div class="left">
                                                 <a href="#" class="link popup-close">
                                                     <i class="icon icon-back"></i>
-                                                    <span class="ios-only">${ LANGUAGE.COM_MSG00 }</span>
+                                                    <span class="ios-only">` + LANGUAGE.COM_MSG00 + `</span>
                                                 </a>
                                             </div>
-                                            <div class="title">${ self.Questions[questionIindex].question }</div>                              
+                                            <div class="title">` + name + `</div>                              
                                         </div>
                                     </div>
                                     <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
                                         <div class="toolbar-inner row bottom-buttons-wrapper">                    
-                                            <button type="submit" class="col button button-fill button-big color-green">${ LANGUAGE.COM_MSG01 }</button>                               
+                                            <button type="submit" class="col button button-fill button-big color-green">` + LANGUAGE.COM_MSG01 + `</button>                               
                                         </div>
                                     </div>
                                     <div class="page-content">
@@ -225,11 +227,11 @@
                                                 <li class="item-content item-input ">
                                                     <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-fail"></i></div>
                                                     <div class="item-inner">
-                                                        <div class="item-title item-label">${ LANGUAGE.QUESTIONS_MSG03 }</div>
+                                                        <div class="item-title item-label">` + LANGUAGE.QUESTIONS_MSG03 + `</div>
                                                         <div class="item-input-wrap input-dropdown-wrap">
                                                           <select name="failReason" placeholder="Please choose..." required validate>
-                                                            <option value="1" ${ question && question.failReason == 1 ? 'selected' : '' }>Not Working</option>
-                                                            <option value="2" ${ question && question.failReason == 2 ? 'selected' : '' }>Other</option>
+                                                            <option value="1">Not Working</option>
+                                                            <option value="2">Other</option>
                                                           </select>
                                                         </div>
                                                     </div>
@@ -237,9 +239,9 @@
                                                 <li class="item-content item-input ">
                                                     <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-notes"></i></div>
                                                     <div class="item-inner">
-                                                        <div class="item-title item-label">${ LANGUAGE.QUESTIONS_MSG04 }</div>
+                                                        <div class="item-title item-label">` + LANGUAGE.QUESTIONS_MSG04 + `</div>
                                                         <div class="item-input-wrap ">
-                                                            <textarea name="failNotes" required validate>${ question && question.notes ? question.notes : '' }</textarea>
+                                                            <textarea name="failNotes" required validate></textarea>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -258,7 +260,8 @@
                             });
                         },                        
                     }                  
-                }).open();              
+                });
+                dynamicPopup.open();
             },
             showPopupSummary: function(){
                 var self = this;
@@ -276,7 +279,7 @@
                     summary[self.Answers[key].state]++;
                 }
 
-                app.popup.create({
+                var dynamicPopup = app.popup.create({
                     content: 
                         `<div class="popup fault-popup">
                             <div class="view">
@@ -286,10 +289,10 @@
                                             <div class="left">
                                                 <a href="#" class="link popup-close">
                                                     <i class="icon icon-back"></i>
-                                                    <span class="ios-only">${ LANGUAGE.COM_MSG00 }</span>
+                                                    <span class="ios-only">` + LANGUAGE.COM_MSG00 + `</span>
                                                 </a>
                                             </div>
-                                            <div class="title">${ name }</div>  
+                                            <div class="title">` + name + `</div>  
                                             <div class="right">
                                                 <a href="#" class="link promptQuitPopup" >                
                                                     <i class="icon-header-close "></i>
@@ -299,31 +302,31 @@
                                     </div>
                                     <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
                                         <div class="toolbar-inner row bottom-buttons-wrapper">                    
-                                            <button class="col button button-fill button-big color-green submitChecklist">${ LANGUAGE.COM_MSG02 }</button>                               
+                                            <button class="col button button-fill button-big color-green submitChecklist">` + LANGUAGE.COM_MSG02 + `</button>                               
                                         </div>
                                     </div>
                                     <div class="page-content">
-                                        <div class="block-title block-title-custom">${ LANGUAGE.QUESTIONS_MSG07 }</div>
+                                        <div class="block-title block-title-custom">` + LANGUAGE.QUESTIONS_MSG07 + `</div>
                                         <div class="block row">
                                             <div class="col-33 with-border-radius text-color-white bg-color-red text-align-center padding-vertical">
                                                 <div><i class="f7-icons icon-other-fail size-36 padding-bottom-8"></i></div>
-                                                <div>${ LANGUAGE.QUESTIONS_MSG08 }</div>
-                                                <div>${ summary[3] }</div>
+                                                <div>` + LANGUAGE.QUESTIONS_MSG08 + `</div>
+                                                <div>` + summary[3] + `</div>
                                             </div>
                                             <div class="col-33 with-border-radius text-color-white bg-color-orange text-align-center padding-vertical">
                                                 <div><i class="f7-icons icon-other-na-items size-36 padding-bottom-8"></i></div>
-                                                <div>${ LANGUAGE.QUESTIONS_MSG09 }</div>
-                                                <div>${ summary[2] }</div>
+                                                <div>` + LANGUAGE.QUESTIONS_MSG09 + `</div>
+                                                <div>` + summary[2] + `</div>
                                             </div>
                                             <div class="col-33 with-border-radius text-color-white bg-color-green text-align-center padding-vertical">
                                                 <div><i class="f7-icons icon-other-passed-items size-36 padding-bottom-8"></i></div>
-                                                <div>${ LANGUAGE.QUESTIONS_MSG10 }</div>
-                                                <div>${ summary[1] }</div>
+                                                <div>` + LANGUAGE.QUESTIONS_MSG10 + `</div>
+                                                <div>` + summary[1] + `</div>
                                             </div>
                                         </div>
                                         <div class="block">
-                                            <p>${ LANGUAGE.PROMPT_MSG002 }</p>  
-                                            <p class="text-color-white">${ LANGUAGE.PROMPT_MSG003 }</p>
+                                            <p>` + LANGUAGE.PROMPT_MSG002 + `</p>  
+                                            <p class="text-color-white">` + LANGUAGE.PROMPT_MSG003 + `</p>
                                         </div>
                                        
                                     </div>
@@ -340,43 +343,27 @@
                             });
                         },                        
                     }                  
-                }).open();
-
+                });
+                dynamicPopup.open();
             },
             saveFault: function(popup){
                 var self = this;                
                 var page = $$(self.$router.currentPageEl);
-                var questionIndex = popup.$el.find('form.faultForm').data('question-index');  
+                var curntNumber = page.data('question-number');  
                 var failReasonSelect = popup.$el.find('[name = "failReason"]');
                 
-
-                self.Answers[questionIndex] = {
-                    number: questionIndex, 
+                self.Answers[curntNumber] = {
+                    number: curntNumber, 
                     state: '3',
                     failReason: failReasonSelect.val(),
                     failReasonText: failReasonSelect[0].options[failReasonSelect[0].selectedIndex].text,
                     notes: popup.$el.find('[name = "failNotes"]').val(),
                 };
 
-                popup.close();
-                page.find('.row[data-question-index ="'+questionIndex+'"] .showPopupFault').addClass('active');
-                self.checkIsAllAnswered();
-                //console.log(self.Answers);
-                
-            },
-            checkIsAllAnswered: function(){
-                var self = this;
 
-                var answeredCount = 0;
-                for (const key of Object.keys(self.Answers)) {                    
-                    answeredCount++;
-                }
-                if (answeredCount == self.Questions.length) {
-                    self.$setState({ AllAnswered: true });                   
-                }else{
-                    self.$setState({ AllAnswered: false });                   
-                }                
-            }
+                popup.close();
+                self.nextQuestion();
+            },
             /*submitChecklist: function(){
                 var self = this;
 
@@ -390,48 +377,17 @@
         on: {
             pageInit: function (e, page) { 
                 var self = this;   
-                //var app = self.$app;
+                var app = self.$app;
+               // console.log( page.$el.data('question-number') );
                 
-                page.$pageEl.find('.showPopupFault').on('click', function(){
-                    var questionIndex = $$(this).closest('.row').data('question-index');
-                    self.showPopupFault(questionIndex);
-                });
+                var questions = page.route.context.Questions;
 
-                page.$pageEl.find('.showImages').on('click', function(){                  
-                    var imagesStr = $$(this).data('images');
-                    if (imagesStr) {
-                        app.photoBrowser.create({
-                            photos : imagesStr.split(","),
-                            type: 'popup',
-                            theme: 'dark',
-                        }).open();
-                    }   
+                $$('.nextQuestion').on('click', function(){
+                    var curntNumber = page.$el.data('question-number');  
+                    
+                    self.Answers[curntNumber] = {number: curntNumber, state: $$(this).data('state')};
+                    self.nextQuestion();
                 });
-                
-                page.$pageEl.find('.question-button').on('click', function(){    
-                    var that = $$(this); 
-                    var parent = that.closest('.row');
-                    var buttonsInRow = parent.find('.question-button'); 
-                    var questionIndex = parent.data('question-index');
-                    
-
-                    if (!that.hasClass('showPopupFault')) {
-                        buttonsInRow.removeClass('active');
-                        self.Answers[questionIndex] = {
-                            number: questionIndex, 
-                            state: that.data('state'),
-                        };
-                        that.addClass('active');
-                        self.checkIsAllAnswered();
-                    }else{
-                        if (self.Answers[questionIndex] && self.Answers[questionIndex].state != '3') {
-                            buttonsInRow.removeClass('active');
-                            delete self.Answers[questionIndex];
-                            self.checkIsAllAnswered();
-                        }
-                    }
-                    
-                });       
                 
                 
             },     
