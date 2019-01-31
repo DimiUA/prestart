@@ -100,7 +100,7 @@
 }
 .md .theme-dealer .toolbar:not(.messagebar),
 .ios .theme-dealer .toolbar{
-	    background: transparent;
+	    background: #333;
 }
 .md .theme-dealer .login-screen-content .toolbar:not(.messagebar), 
 .ios .theme-dealer .login-screen-content .toolbar{
