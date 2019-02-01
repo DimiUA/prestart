@@ -118,6 +118,12 @@
                     </ul>                                        
                 </div>
 
+                <div class="block">
+                    <div class="button" @click="showLocation">
+                        GetLocation
+                    </div>
+                </div>
+
                 {{/if}}
 
 
@@ -142,7 +148,20 @@
             return ret;
         },
         methods: {
-            
+            showLocation: function(){
+                if (BackgroundGeolocation) {
+                    BackgroundGeolocation.getCurrentLocation(function(location){
+                        alert(JSON.stringify(location));
+                    }, function(code, message){
+                        alert(code, message);
+                    }, 
+                    {
+                        timeout: 10000
+                    });
+                }else{
+                    alert('BackgroundGeolocation plugin not found');
+                }
+            },
             getQuestions: function(){
                 var self = this; 
 
