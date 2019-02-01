@@ -274,11 +274,12 @@ function configureBackgroundTracking(){
           'X-FOO': 'bar'
         },
         // customize post properties
-        postTemplate: {
+        /*postTemplate: {
           lat: '@latitude',
           lon: '@longitude',
-          foo: 'bar' // you can also add your own properties
-        }
+          foo: 'bar' 
+        }*/
+        postTemplate: null,
     });
 
     BackgroundGeolocation.checkStatus(function(status) {
