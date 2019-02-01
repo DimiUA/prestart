@@ -1,0 +1,324 @@
+<template>
+<!-- Page, data-name contains page name which can be used in callbacks -->
+        <div class="page " > <!-- page-with-subnavbar -->
+        <!-- Top Navbar -->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="left">
+                        <a href="/panel-left/" class="link icon-only panel-open" data-panel="left">
+                            <i class="icon f7-icons ios-only">menu</i>
+                            <i class="icon material-icons md-only">menu</i>
+                          </a>
+                    </div>
+                    <div class="title sliding">{{@global.LANGUAGE.HOME_MSG00}}</div>
+                    <div class="right">
+                        <!-- <a href="#" class="link panel-open" data-panel="right">                
+                           Фильтр <i class="icon material-icons ">filter_list</i>
+                        </a>  -->
+                    </div>
+
+                   
+                </div>
+            </div>
+
+            <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
+                <div  class="toolbar-inner row bottom-buttons-wrapper">
+                    {{#if TripStarted}}
+                    <button key="ButtonFinishTrip" @click="finishTrip" class="col button button-fill button-big color-red ">{{@global.LANGUAGE.COM_MSG06}}</button>
+                    {{else}}
+                    <button key="ButtonStartQuestions" @click="getQuestions" class="col button button-fill button-big color-green ">{{@global.LANGUAGE.COM_MSG05}}</button>
+                    {{/if}} 
+                </div>
+            </div>
+        
+            <!-- Scrollable page content-->
+            <div class="page-content">                
+                
+                {{#if TripStarted}}
+
+                <div key="BlockSelectedVehicle">
+                   <div class="block-title ">{{@global.LANGUAGE.HOME_MSG05}}</div>
+                    <div class="list no-hairlines">
+                        <ul>
+                            {{#Trip}}
+                            
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-other-asset "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.HOME_MSG06}}</div>
+                                            {{AssetName}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content"> 
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-other-date "></i>
+                                    </div>                      
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <div class="item-header item-label">{{@global.LANGUAGE.HOME_MSG07}}</div>
+                                            {{StartTime}}
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </li>
+                            {{/Trip}}
+                        </ul>
+                    </div>
+                </div>
+
+                {{else}}
+
+                <div key="BlockSelectChecklist" class="list no-hairlines">
+                    <ul>                        
+                        <li class="item-content item-input ">
+                            <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-asset"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG01}}</div>
+                                <div class="item-input-wrap input-dropdown-wrap">
+                                  <select name="asset" placeholder="Please choose..." >
+                                    <option value="Asset1">Asset1</option>
+                                    <option value="Asset2">Asset2</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input ">
+                            <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-checklist"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG02}}</div>
+                                <div class="item-input-wrap input-dropdown-wrap">
+                                  <select name="checklist" placeholder="Please choose...">
+                                    <option value="checklist1">checklist1</option>
+                                    <option value="checklist2">checklist2</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                {{@global.LANGUAGE.HOME_MSG03}}
+                                <div class="item-footer">{{@global.LANGUAGE.PROMPT_MSG000}}</div>
+                                </div>
+                                <div class="item-after">
+                                    <label class="toggle color-red">
+                                        <input type="checkbox" name="driving-car" checked="checked">
+                                        <span class="toggle-icon"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>                    
+                    </ul>                                        
+                </div>
+
+                {{/if}}
+
+
+                
+                
+
+            </div>
+        </div>
+    </template>
+
+
+<script>
+  // script must return component object
+    return {
+        data: function () {
+            var self = this;
+            var ret = {};            
+            //app.methods.storageSetupTime();
+
+            ret.TripStarted = self.$app.methods.getBooleanVal(localStorage.TripStarted);
+
+            return ret;
+        },
+        methods: {
+            
+            getQuestions: function(){
+                var self = this; 
+
+                /*app.dialog.progress();
+                app.request.get(API_URL.GET_QUESTIONS, {}, function (data, xhr, status) {  
+                    console.log(data);
+
+                    app.dialog.close();
+                },
+                function (xhr, status) {            
+                    app.dialog.close();
+                    //app.dialog.alert('Error occurred during get categories request!');
+                    app.dialog.alert('Error occured');             
+                },
+                'json');  */  
+
+                var questions = [        
+                    {
+                        question: 'Check engine oil level, coolant level, washer water level, fuel level in tanks',
+                        images: '',
+                    },
+                    {
+                        question: 'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
+                        images: ['http://oi67.tinypic.com/2evyh3k.jpg','http://oi64.tinypic.com/2eamloy.jpg'],
+                    },
+                    {
+                        question: 'Check cab entry/exit steps & handles - check seats and seat belts',
+                        images: ['http://oi64.tinypic.com/2eamloy.jpg'],
+                    },
+                    {
+                        question: 'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
+                        images: [],
+                    },
+                    {
+                        question: 'Check registration is current',
+                        images: ['http://oi64.tinypic.com/2eamloy.jpg'],
+                    },
+                   
+                ];
+
+                /*
+                    'Drain condensation & contamination from all air tanks',
+                    'Check triangles & safety kit (first aid) are on/in the vehicle',
+                    'Check all tyres for tread, damage & inflation - including spares',
+                    'Visually check wheels and wheel nuts and spare wheel carriers',
+                    'Check ALL lights, clearance lights, hazards, reflectors, lenses are intact & working',
+                    'Check wipers, washers, windows and mirrors are clean & operational',
+                    'Visually check chassis, suspension including air bags, check cab & body for damage',
+                    'Check warning devices',
+                    'Check trailer couplings for leaks - air / electrical / hydraulic (if applicable)',
+                    'Check that mudguards & mudflaps are securely fitted',
+                    'Check number plates are secure & intact',
+                    'ug test to ensure secure truck/trailer connection',
+                    'When commenced driving apply brakes at low speed to ensure operation & release',
+                    'Check Service Sticker is not overdue',
+                */
+
+                
+                //var questions = [];
+
+                if (questions && questions.length) {
+                    for (var i = questions.length - 1; i >= 0; i--) {
+                        if (questions[i].images && questions[i].images.length === 0) {
+                            questions[i].images = '';
+                        }                        
+                    }
+                }else{
+                    questions = '';
+                }
+             
+                var params = {
+                    Name: 'Asset3',
+                    Questions: questions
+                };
+
+                mainView.router.navigate('/questions/', { context: params } );
+
+            }, 
+            finishTrip: function(){
+                var self = this; 
+
+                var params = {};
+
+                mainView.router.navigate('/trip-info/8/Asset3/', { context: params } );
+                localStorage.TripStarted = 0;
+            },
+           /* getHotels: function (virtualList) {
+                var self = this; 
+
+                var hotels = app.methods.getFromStorage('hotels');
+
+                if (hotels && hotels.length > 0) {
+                    self.prepareFilters(hotels);
+                    if (virtualList.items.length === 0) {
+                        virtualList.appendItems(hotels);
+                    }else{
+                        virtualList.replaceAllItems(hotels);
+                    }
+                }else{   
+                    app.dialog.progress();
+                    app.request.get(API_URL.GET_HOTELS, {}, function (data, xhr, status) {  
+                        //console.log(data);
+
+                        app.methods.setInStorage({
+                            name: 'hotels',
+                            data: data
+                        });
+
+                        self.prepareFilters(data);
+
+                        if (virtualList.items.length === 0) {
+                            virtualList.appendItems(data);
+                        }else{
+                            virtualList.replaceAllItems(data);
+                        }
+
+                        app.dialog.close();
+                    },
+                    function (xhr, status) {            
+                        app.dialog.close();
+                        //app.dialog.alert('Error occurred during get categories request!');
+                        app.dialog.alert('Error occured');             
+                    },
+                    'json');    
+                }
+                
+                    
+            },*/
+        },
+       
+        on: {
+            pageInit: function (e, page) { 
+                var self = this;   
+                
+               
+                /*if (localStorage.ACCOUNT) {
+                    self.$app.methods.login();
+                }else{
+                    self.$app.methods.logout();
+                }*/
+               
+                
+            },     
+            pageAfterOut: function () {
+                // page has left the view
+            },
+            pageBeforeIn: function(){
+                var self = this;  
+                var tripStarted = self.$app.methods.getBooleanVal(localStorage.TripStarted);
+
+                if (tripStarted) {
+                    self.$setState({
+                        TripStarted: tripStarted,
+                        Trip: {
+                            AssetName: 'Asset3',
+                            StartTime: '20/10/2018 12:34:45',
+                        }
+                    });
+                }else{
+                    self.$setState({
+                        TripStarted: tripStarted,
+                    });
+                }
+                
+                    
+            },
+            pageAfterIn: function(e, page) {
+                
+               // console.log('here');
+                //if (1) {
+                    
+                //}else{
+
+                //}
+                
+            }
+        }
+    };
+</script>

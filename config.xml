@@ -53,6 +53,7 @@
     <plugin name="cordova-plugin-camera" source="npm" spec="4.0.3"  />
     <plugin spec="https://github.com/phonegap/phonegap-mobile-accessibility.git" source="git" />
     <!-- <plugin name="cordova-launch-review" source="npm" spec="3.1.1" /> -->
+    <plugin name="cordova-plugin-mauron85-background-geolocation" source="npm"/>
 
     <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
         <string>You can take a photo of your asset using camera and upload it into the app</string>
@@ -60,9 +61,9 @@
     <edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
         <string>You can select photo of your asset in your photo library and upload it into the app</string>
     </edit-config>
-    <!-- <edit-config platform="ios" target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
+    <edit-config platform="ios" target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
         <string>need location access to find things nearby</string>
-    </edit-config> -->
+    </edit-config>
     <edit-config target="NSPhotoLibraryAddUsageDescription" file="*-Info.plist" mode="merge">
         <string>Need photo library access to save pictures there</string>
     </edit-config>
