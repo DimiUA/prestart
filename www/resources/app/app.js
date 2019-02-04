@@ -265,7 +265,7 @@ function configureBackgroundTracking(){
         distanceFilter: 50,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
-        debug: true,
+        //debug: false,
         interval: 10000,
         fastestInterval: 5000,
         activitiesInterval: 10000,
@@ -286,10 +286,6 @@ function configureBackgroundTracking(){
         console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
-
-        alert('[INFO] BackgroundGeolocation service is running', status.isRunning);
-        alert('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
-        alert('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
      
         // you don't need to check status before start (this is just the example)
         if (!status.isRunning) {
