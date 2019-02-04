@@ -88,8 +88,11 @@
 
 		        this.$app.methods.logout();       
 
-                if (BackgroundGeolocation) {
-                    BackgroundGeolocation.stop();
+                /*if (BackgroundGeolocation) {
+                    BackgroundGeolocation.stop();                    
+                }*/ 
+                if (backgroundGeolocation) {                 
+                    backgroundGeolocation.stop();
                 }         
 		    },
             home: function(){       

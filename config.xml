@@ -53,7 +53,8 @@
     <plugin name="cordova-plugin-camera" source="npm" spec="4.0.3"  />
     <plugin spec="https://github.com/phonegap/phonegap-mobile-accessibility.git" source="git" />
     <!-- <plugin name="cordova-launch-review" source="npm" spec="3.1.1" /> -->
-    <plugin name="cordova-plugin-mauron85-background-geolocation" source="npm"/>
+    <!-- <plugin name="cordova-plugin-mauron85-background-geolocation" source="npm"/> -->
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.3.6"/>
 
     <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
         <string>You can take a photo of your asset using camera and upload it into the app</string>
