@@ -88,12 +88,10 @@
 
 		        this.$app.methods.logout();       
 
-                /*if (BackgroundGeolocation) {
+                if (BackgroundGeolocation) {
                     BackgroundGeolocation.stop();                    
-                }*/ 
-                if (backgroundGeolocation) {                 
-                    backgroundGeolocation.stop();
-                }         
+                } 
+                       
 		    },
             home: function(){       
                 this.$app.panel.left.close();  

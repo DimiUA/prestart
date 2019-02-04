@@ -258,7 +258,7 @@ function backFix(event){
 }
 
 function configureBackgroundTracking(){
-    /*BackgroundGeolocation.configure({
+    BackgroundGeolocation.configure({
         locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
         stationaryRadius: 50,
@@ -266,6 +266,9 @@ function configureBackgroundTracking(){
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
         debug: false,
+        stopOnTerminate: false,
+        startOnBoot: true,
+        notificationsEnabled: false,
         interval: 10000,
         fastestInterval: 5000,
         activitiesInterval: 10000,
@@ -274,11 +277,11 @@ function configureBackgroundTracking(){
           'X-FOO': 'bar'
         },
         // customize post properties
-        postTemplate: {
+        /*postTemplate: {
           lat: '@latitude',
           lon: '@longitude',
           foo: 'bar' 
-        }
+        }*/
         postTemplate: null,
     });
 
@@ -295,52 +298,5 @@ function configureBackgroundTracking(){
 
     BackgroundGeolocation.on('error', function(error) {
         console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
-    });*/
-
-
-    /**
-    * This callback will be executed every time a geolocation is recorded in the background.
-    */
-    var callbackFn = function(location) {
-        console.log('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
-
-        // Do your HTTP request here to POST location to your server.
-        // jQuery.post(url, JSON.stringify(location));
-
-        app.request.post('http://sinopacificukraine.com/test/prestart/locations2.php', location, function (data, xhr, status) { 
-                                             
-        	backgroundGeolocation.finish();
-        },
-        function (xhr, status) {            
-           	backgroundGeolocation.finish();
-            //app.dialog.alert('Error occurred during get categories request!');
-            app.dialog.alert('Error occured');             
-        },
-        'json');
-
-        /*
-        IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
-        and the background-task may be completed.  You must do this regardless if your HTTP request is successful or not.
-        IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
-        */
-        //backgroundGeolocation.finish();
-    };
-
-    var failureFn = function(error) {
-        console.log('BackgroundGeolocation error');
-    };
-
-    // BackgroundGeolocation is highly configurable. See platform specific configuration options
-    backgroundGeolocation.configure(callbackFn, failureFn, {
-        desiredAccuracy: 10,
-        stationaryRadius: 20,
-        distanceFilter: 30,
-        interval: 60000
     });
-
-    // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
-    backgroundGeolocation.start();
-
-    // If you wish to turn OFF background-tracking, call the #stop method.
-    // backgroundGeolocation.stop();
 }
