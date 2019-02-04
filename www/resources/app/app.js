@@ -265,7 +265,7 @@ function configureBackgroundTracking(){
         distanceFilter: 50,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
-        //debug: false,
+        debug: false,
         interval: 10000,
         fastestInterval: 5000,
         activitiesInterval: 10000,
