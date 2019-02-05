@@ -268,14 +268,14 @@ function configureBackgroundTracking(){
         debug: false,
         stopOnTerminate: false,
         startOnBoot: true,
-        //notificationsEnabled: false,
+        notificationsEnabled: true,
         startForeground: true,
         interval: 10000,
         fastestInterval: 5000,
         activitiesInterval: 10000,
         url: 'http://sinopacificukraine.com/test/prestart/locations.php',
         httpHeaders: {
-          'X-FOO': 'bar'
+            'X-FOO': 'bar'
         },
         // customize post properties
         /*postTemplate: {
@@ -299,5 +299,6 @@ function configureBackgroundTracking(){
 
     BackgroundGeolocation.on('error', function(error) {
         console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
+        alert('[ERROR] BackgroundGeolocation error:', error.code, error.message);
     });
 }
