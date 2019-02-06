@@ -243,7 +243,7 @@ function onDeviceReady(){
     configureBackgroundTracking();
 
     document.addEventListener("backbutton", backFix, false); 
-    alert(JSON.stringify(window.device));
+    //alert(JSON.stringify(window.device));
 }
 
 
