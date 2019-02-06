@@ -286,16 +286,7 @@ function configureBackgroundTracking(){
         postTemplate: null,
     });
 
-    BackgroundGeolocation.checkStatus(function(status) {
-        console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
-        console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
-        console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
-     
-        // you don't need to check status before start (this is just the example)
-        if (!status.isRunning) {
-            BackgroundGeolocation.start(); //triggers start on start event
-        }
-    });
+    
 
     BackgroundGeolocation.on('error', function(error) {
         console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
