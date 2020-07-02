@@ -1,6 +1,8 @@
+<!--suppress JSAnnotator -->
 <template>
     <div class="page "> 
         <div class="navbar">
+            <div class="navbar-bg"></div>
             <div class="navbar-inner">
                 <div class="left">
                     <a href="#"  @click="promptQuit" class="link">
@@ -42,7 +44,7 @@
                                         </div>
                                     </div>
                                     <div class="item-text text-color-white">                                    
-                                        {{question}}
+                                        {{Name}}
                                     </div>  
                                     <div class="item-text margin-top">
                                         <div class="row" data-question-index="{{@index}}">
@@ -83,11 +85,37 @@
     return {
         data: function () {
             var self = this;
-            var context = this.$route.context;
+
+            let checkListCode = this.$route.context.CheckListCode
+            let checkLists = self.$app.methods.getFromStorage('checkList');
             //console.log(self);
+
+
+            let checkList =  this.$app.methods.findObjectByKey(checkLists, 'Code', checkListCode);
+            let questions =  this.$app.methods.sortArrayByObjProps(checkList.Options, [
+                {
+                    prop:'Order',
+                    direction: 1
+                },{
+                    prop:'Name',
+                    direction: 1
+                }
+            ]);
+
+            if (questions && questions.length) {
+                for (var i = questions.length - 1; i >= 0; i--) {
+                    if (questions[i].images && questions[i].images.length === 0) {
+                        questions[i].images = '';
+                    }
+                }
+            }else{
+                questions = '';
+            }
+
             var ret = {
                 //Questions: null,
-                
+                Name: checkList.Name,
+                Questions: questions,
                 Answers: {},
                 AllAnswered: false,
             };   
@@ -98,28 +126,21 @@
         methods: {
             promptQuit: function(params){               
                 var self = this;
-                var modalTex = '<div class="color-red custom-modal-title">'+ self.Name +'</div>' +
-                    '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG001 +'</div>';   
-                //var modalTex = '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG004 +'</div>';                         
-                var dialog = app.dialog.create({
-                       title: '<div class="custom-modal-logo-wrapper"><img class="custom-modal-logo" src="resources/images/logo-dark.png" alt=""/></div>',
-                        text: modalTex,                                
-                     buttons: [
-                        {
-                            text: LANGUAGE.COM_MSG04,                            
-                        },
-                        {
-                            text: LANGUAGE.COM_MSG03,                            
-                            onClick: function () {                                
-                                mainView.router.back();
-                                if (params && params.popup) {
-                                    params.popup.close();
-                                }
+                this.$app.methods.customDialog({
+                    text: LANGUAGE.PROMPT_MSG001,
+                    title: self.Name,
+                    buttons: [{
+                        text: LANGUAGE.COM_MSG04,
+                    },{
+                        text: LANGUAGE.COM_MSG03,
+                        onClick: function () {
+                            mainView.router.back();
+                            if (params && params.popup) {
+                                params.popup.close();
                             }
-                        },
-                    ]
-                }); 
-                dialog.open();
+                        }
+                    }]
+                })
             },
             promptStartTrip: function(params){
                 var self = this;
@@ -130,7 +151,7 @@
                     <div class="list no-margin  text-color-black">
                         <ul>
                             <li>
-                                <label class="item-radio item-content">
+                                <label class="item-radio item-content color-red">
                                     <input type="radio" name="trip-type" value="business"  checked/>
                                     <i class="icon icon-radio"></i>
                                     <div class="item-inner">
@@ -139,7 +160,7 @@
                                 </label>
                             </li>
                             <li>
-                                <label class="item-radio item-content">
+                                <label class="item-radio item-content color-red">
                                     <input type="radio" name="trip-type" value="personal"  />
                                     <i class="icon icon-radio"></i>
                                     <div class="item-inner">
@@ -148,7 +169,7 @@
                                 </label>
                             </li>                            
                             <li>
-                                <label class="item-radio item-content">
+                                <label class="item-radio item-content color-red">
                                     <input type="radio" name="trip-type" value="diagnostic"  />
                                     <i class="icon icon-radio"></i>
                                     <div class="item-inner">
@@ -158,8 +179,8 @@
                             </li>                 
                         </ul>
                     </div>
-                `;                 
-                app.dialog.create({
+                `;
+                self.$app.dialog.create({
                        title: '<div class="custom-modal-logo-wrapper"><img class="custom-modal-logo" src="resources/images/logo-dark.png" alt=""/></div>',
                         text: modalTex,                                
                      buttons: [
@@ -169,11 +190,22 @@
                             onClick: function (dialog) { 
                                 console.log(dialog);
                                 var tripType = dialog.$el.find('input[name="trip-type"]:checked').val();
-                                if (tripType != 'diagnostic') {
-                                    localStorage.TripStarted = 1;  
+                                if (tripType !== 'diagnostic') {
+                                    let obj = {
+                                        TripStarted: true,
+                                        Trip: {
+                                            AssetName: 'Asset3',
+                                            StartTime: '20/10/2018 12:34:45',
+                                        }
+                                    };
+                                    AppEvents.emit('tripStatusChanged', obj);
+                                    self.$app.methods.setInStorage({
+                                        name: 'additionalFlags',
+                                        data: obj
+                                    });//localStorage.TripStarted = 1;
                                 }
-                                
-                                mainView.router.back('/',{force: true});
+                                self.$app.view.main.router.back();
+                                //mainView.router.back('/',{force: true});
                                 if (params && params.popup) {
                                     params.popup.close();
                                 }
@@ -189,7 +221,7 @@
 
                 var question = self.Answers[questionIindex];              
 
-                app.popup.create({
+                    self.$app.popup.create({
                     //closeByBackdropClick: false,
                     content: 
                         `<div class="popup fault-popup">
@@ -203,7 +235,7 @@
                                                     <span class="ios-only">${ LANGUAGE.COM_MSG00 }</span>
                                                 </a>
                                             </div>
-                                            <div class="title">${ self.Questions[questionIindex].question }</div>                              
+                                            <div class="title">${ self.Questions[questionIindex].Name }</div>
                                         </div>
                                     </div>
                                     <div class="toolbar no-shadow toolbar-bottom-md tabbar-custom2">
@@ -214,9 +246,10 @@
                                     <div class="page-content">
                                         <div class="top-img-wrapper">
                                             <div class="top-img-content">
-                                                
+                                               <!-- <img data-name="prestartp_test.jpg" src="https://res.cloudinary.com/dmuibj5uf/image/upload/v1591374240/sinoafrica/pckahbvv5pt7lgo0rjac.png" class="">-->
+                                                <!--<img src="https://res.cloudinary.com/dmuibj5uf/image/upload/v1591374240/sinoafrica/pznildufcdyobjdss29k.png" class="">-->
                                             </div>
-                                            <div class="top-img-load-button bg-color-white">
+                                            <div class="top-img-load-button bg-color-white showUploadPhotoOptions">
                                                 <i class="f7-icons icon-font icon-other-photo text-color-dark-grey"></i>
                                             </div>
                                         </div>
@@ -250,8 +283,12 @@
                             </div>         
                         </div>`,
                     on: {
-                        opened: function (popup) { 
-                            $$('.faultForm').on('submit', function(e){
+                        opened: function (popup) {
+                            popup.$el.find('.showUploadPhotoOptions').on('click', function (e) {
+                                //self.showUploadPhotoOptions();
+                                self.loadEditImageModal()
+                            })
+                            popup.$el.find('.faultForm').on('submit', function(e){
                                 e.preventDefault();
                                 self.saveFault(popup);
                                 return false;
@@ -259,6 +296,181 @@
                         },                        
                     }                  
                 }).open();              
+            },
+            showUploadPhotoOptions: function(){
+                let self = this;
+                self.$app.actions.create({
+                    buttons: [
+                        {
+                            //text: LANGUAGE.COM_MSG074,
+                            text: `<div class="action_button_wrapper">
+                                    <div class="action_button_block action_button_media text-color-gray">
+                                        <i class="f7-icons icon-other-image size-20"></i>
+                                    </div>
+                                    <div class="action_button_block action_button_text">
+                                        ${ LANGUAGE.COM_MSG15 }
+                                    </div>
+                                </div>`,
+                            onClick: function () {
+                                self.getImageFromDevice(1);
+                            }
+                        },
+                        {
+                            //text: LANGUAGE.PROMPT_MSG025,
+                            text: `<div class="action_button_wrapper">
+                                    <div class="action_button_block action_button_media text-color-gray">
+                                        <i class="f7-icons icon-other-photo size-20"></i>
+                                    </div>
+                                    <div class="action_button_block action_button_text">
+                                        ${ LANGUAGE.COM_MSG16 }
+                                    </div>
+                                </div>`,
+                            onClick: function () {
+                                self.getImageFromDevice(0);
+                            }
+                        },{
+                            //text: LANGUAGE.COM_MSG001,
+                            text: `<div class="action_button_wrapper">
+                                    <div class="action_button_block action_button_media text-color-red">
+                                        <i class="f7-icons icon-header-close size-16"></i>
+                                    </div>
+                                    <div class="action_button_block action_button_text">
+                                        ${ LANGUAGE.COM_MSG17 }
+                                    </div>
+                                </div>`,
+                            color: 'red',
+                        },
+                    ]
+                }).open();
+            },
+            getImageFromDevice: function(source=1){
+                let self = this;
+                if (!navigator.camera) {
+                    self.$app.methods.customDialog({title:LANGUAGE.PROMPT_MSG012, text: LANGUAGE.PROMPT_MSG013});
+                    return;
+                }
+                let options = {
+                    quality: 50,
+                    destinationType: Camera.DestinationType.DATA_URL,
+                    sourceType: source, // 0:Photo Library, 1=Camera, 2=Saved Album
+                    encodingType: 0 // 0=JPG 1=PNG
+                };
+
+                navigator.camera.getPicture(
+                        function(imgData) {
+                            self.loadEditImageModal("data:image/jpeg;base64," + imgData);
+                        },
+                        function() {
+                            self.$app.methods.customDialog({title:LANGUAGE.PROMPT_MSG012, text: LANGUAGE.PROMPT_MSG014});
+                            //alert('Error taking picture', 'Error');
+                        },
+                        options);
+            },
+            loadEditImageModal: function(src){
+                let self = this;
+                self.$app.progressbar.hide();
+                self.$app.popup.create({
+                    closeByBackdropClick: false,
+                    content:
+                            `<div class="popup edit-image-popup">
+                            <div class="view">
+                                <div class="page">
+                                    <div class="navbar">
+                                        <div class="navbar-bg"></div>
+                                        <div class="navbar-inner">
+                                            <div class="left">
+                                                <a href="#" class="link popup-close icon-only">
+                                                    <i class="f7-icons">close</i>
+                                                </a>
+                                            </div>
+                                            <div class="title">` + LANGUAGE.COM_MSG18 + `</div>
+                                            <div class="right">
+                                                <a href="#" class="link saveEditedImage" >
+                                                    <i class="f7-icons">check</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="page-content">
+                                        <div class="asset_img_before_crop" style="">
+                                            <img style="max-width: 980px; max-height: 980px; " id="image" src="` + src + `">
+                                        </div>
+                                        <button type="button" class="button button-fill text-color-black redo"><span class="f7-icons">forward</span></button>
+                                        <button type="button" class="button button-fill text-color-black undo"><span class="f7-icons">reply</span></button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`,
+                    on: {
+                        opened: function (popup) {
+                            let cropper = self.initCropper();
+                            popup.$el.find('.saveEditedImage').on('click', function(){
+                                self.saveImage(cropper);
+                            });
+                            popup.$el.find('.redo').on('click', function(){
+                                cropper.rotate(90);
+                            });
+                            popup.$el.find('.undo').on('click', function(){
+                                cropper.rotate(-90);
+                            });
+                        },
+                    }
+                }).open();
+            },
+            initCropper: function (){
+                let image = document.getElementById('image');
+                let cropper = new Cropper(image, {
+                    aspectRatio: NaN,
+                    dragMode:'move',
+                    rotatable:true,
+                    minCropBoxWidth:200,
+                    minCropBoxHeight:200,
+                    minCanvasWidth:200,
+                    minCanvasHeight:200,
+                    minContainerWidth:200,
+                    minContainerHeight:200,
+                    crop: function(data) {
+                    }
+                });
+                return cropper;
+            },
+            saveImage: function(cropper){
+                let self = this;
+
+                let resImg =  cropper.getCroppedCanvas({
+                    minWidth: 200,
+                    minHeight: 200
+                }).toDataURL("image/jpeg",0.7);
+
+                self.$app.data.NewImageTimestamp = new Date().getTime();
+                let assetImg = {
+                    data: resImg,
+                    id: 'Prestart_'+NewImageTimestamp
+                };
+
+                self.$app.dialog.progress();
+                self.$app.request.promise.post(API_URL.PHOTO_UPLOAD, assetImg, 'json')
+                        .then(function (result) {
+                            self.$app.dialog.close();
+                            if(result.data.MajorCode === '000') {
+                                console.log(result.data);
+                                $$('.fault-popup .top-img-content').html(`<img data-name="${result.data.Data}" src="${API_DOMIAN9}Attachment/images/${result.data.Data+'?'+ self.$app.data.NewImageTimestamp}" alt="">`);
+
+                            }else{
+                                self.$app.dialog.alert(LANGUAGE.PROMPT_MSG023 + `<br>MajorCode: ${result.data.MajorCode}<br>MinorCode: ${result.data.MinorCode}<br>${result.data.Data}`);
+                            }
+                            self.$app.popup.close();
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                            self.$app.dialog.close();
+                            if (err && err.status === 404){
+                                self.$app.dialog.alert(LANGUAGE.PROMPT_MSG015);
+                            }else{
+                                self.$app.dialog.alert(LANGUAGE.PROMPT_MSG008);
+                            }
+                        });
             },
             showPopupSummary: function(){
                 var self = this;
@@ -276,7 +488,7 @@
                     summary[self.Answers[key].state]++;
                 }
 
-                app.popup.create({
+                self.$app.popup.create({
                     content: 
                         `<div class="popup fault-popup">
                             <div class="view">
@@ -356,7 +568,9 @@
                     failReason: failReasonSelect.val(),
                     failReasonText: failReasonSelect[0].options[failReasonSelect[0].selectedIndex].text,
                     notes: popup.$el.find('[name = "failNotes"]').val(),
+                    image: popup.$el.find('.top-img-content img').data('name'),
                 };
+
 
                 popup.close();
                 page.find('.row[data-question-index ="'+questionIndex+'"] .showPopupFault').addClass('active');

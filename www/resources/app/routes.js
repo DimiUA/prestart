@@ -8,8 +8,9 @@ routes = [
     {
         path: '/panel-left/',
         panel: {
-            componentUrl: './resources/pages/panel-left.html',
-        }
+            componentUrl: './resources/pages/panel-left.html?v=1.3',
+        },
+        name: 'panel-left'
     },
     {
         path: '/login-screen/',        

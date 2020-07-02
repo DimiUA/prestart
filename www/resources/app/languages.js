@@ -14,7 +14,15 @@ window.LanguagePackages= {
 		"COM_MSG08": "View photo",
 		"COM_MSG09": "Checklist is empty",
 		"COM_MSG10": "Next",
-		"COM_MSG11": "Accept",			
+		"COM_MSG11": "Accept",
+		"COM_MSG12": "Loading...",
+		"COM_MSG13": "Search",
+		"COM_MSG14": "OK",
+		"COM_MSG15": "Take Photo",
+		"COM_MSG16": "Upload Photo",
+		"COM_MSG17": "Cancel",
+		"COM_MSG18": "Edit Image",
+
 
 		"PROMPT_MSG000": "Activate this option if you are currently driver of selected asset",
 		"PROMPT_MSG001": "Quit from this checklist?",
@@ -23,6 +31,17 @@ window.LanguagePackages= {
 		"PROMPT_MSG004": "Select Trip Type, please.",
 		"PROMPT_MSG005": "You have no Trips yet.",
 		"PROMPT_MSG006": "Are you sure you want to close the application?",
+		"PROMPT_MSG007": "The login(email) or password you entered is incorrect.",
+		"PROMPT_MSG008": "An issue has been detected, please try again later or contact our support team",
+		"PROMPT_MSG009": "Nothing found",
+		"PROMPT_MSG010": "Select Checklist, please",
+		"PROMPT_MSG011": "Select Vehicle, please",
+		"PROMPT_MSG012": "Error",
+		"PROMPT_MSG013": "Camera API not supported",
+		"PROMPT_MSG014": "Error taking picture",
+		"PROMPT_MSG015": "Method Not Found",
+
+		"PROMPT_MSG023": "Data not saved.",
 
 
 		"HOME_MSG00": "Home",

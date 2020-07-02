@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-  
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src * gap://ready file:; font-src 'self' data:; media-src *; img-src * 'self' data:; style-src 'self' http://* https://* 'unsafe-inline' *; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval' *" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -13,7 +13,7 @@
     <title>PreStart</title>
   
     <link rel="stylesheet" href="resources/libraries/framework7/normalize.min.css">
-    <link rel="stylesheet" href="resources/libraries/framework7/framework7.min.css">
+    <link rel="stylesheet" href="resources/libraries/framework7/framework7.bundle.min.css">
     <link rel="stylesheet" href="resources/libraries/leaflet/leaflet.css">
     
     <link rel="stylesheet" href="resources/fonts/fontastic/styles.css">
@@ -31,16 +31,66 @@
           
         </div>
 
+        <script id="loginScreenTemplate" type="text/template7">
+            <div class="login-screen">
+                <!--<div class="view">-->
+                <div class="page">
+                    <div class="page-content login-screen-content ">
+                        <div class="login-screen-title padding-horizontal logo">
+                            <img src="resources/images/logo.png" alt="">
+                        </div>
+                        <form name="login-form" class="login-form">
+                            <div class="list color-green no-hairlines no-hairlines-between " >
+                                <ul>
+                                    <li class="item-content item-input item-input-outline">
+                                        <div class="item-inner">
+                                            <div class="item-input-wrap">
+                                                <input type="text" name="username" placeholder="{{@global.LANGUAGE.LOGIN_MSG02}}" required validate>
+                                                <span class="input-clear-button"></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item-content item-input item-input-outline">
+                                        <div class="item-inner">
+                                            <div class="item-input-wrap">
+                                                <input type="password" name="password" placeholder="{{@global.LANGUAGE.LOGIN_MSG03}}" required validate>
+                                                <span class="input-clear-button password-clear-button"></span>
+                                                <span class="password-toggle text-color-gray"><i class="f7-icons icon-other-password "></i></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--<li class="text-align-right">
+                                        <a href="/forgot-password/" class="text-color-white margin-right text-decoration-underline">{{@global.LANGUAGE.LOGIN_MSG03}}</a>
+                                    </li>-->
+                                </ul>
+                            </div>
+                            <div class="list">
+                                <ul>
+                                    <li class="padding-horizontal">
+                                        <button type="submit" class="button button-fill button-large color-custom">{{@global.LANGUAGE.LOGIN_MSG04}}</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--</div>-->
+            </div>
+        </script>
+
     </div>
     
   <!-- Cordova -->
   <script src="cordova.js"></script>
 
   <!-- Framework7 library -->
-  <script src="resources/libraries/framework7/framework7.min.js"></script>
+  <script src="resources/libraries/framework7/framework7.bundle.min.js"></script>
   
   <script type="text/javascript" src="resources/libraries/jquery/jquery-3.3.1.min.js"></script>
-
+    <!-- Moment -->
+    <script type="text/javascript" src="resources/libraries/moment/moment.min.js" ></script>
+    <script type="text/javascript" src="resources/libraries/moment/moment-duration-format.js" ></script>
+    <script type="text/javascript" src="resources/libraries/moment/moment-timezone-with-data-10-year-range.min.js" ></script>
   
   <script type="text/javascript" src="resources/libraries/leaflet/leaflet.js"></script>
 
@@ -51,7 +101,7 @@
   <script src="resources/app/routes.js"></script>
 
   <!-- Your custom app scripts -->
-  <script src="resources/app/app.js"></script>
+  <script src="resources/app/app.js?v=1.1"></script>
   
 </body>
 </html>

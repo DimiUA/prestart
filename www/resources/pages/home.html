@@ -1,11 +1,13 @@
+<!--suppress JSAnnotator -->
 <template>
 <!-- Page, data-name contains page name which can be used in callbacks -->
         <div class="page " > <!-- page-with-subnavbar -->
         <!-- Top Navbar -->
             <div class="navbar">
+                <div class="navbar-bg"></div>
                 <div class="navbar-inner">
                     <div class="left">
-                        <a href="/panel-left/" class="link icon-only panel-open" data-panel="left">
+                        <a href="/panel-left/" class="link icon-only">
                             <i class="icon f7-icons ios-only">menu</i>
                             <i class="icon material-icons md-only">menu</i>
                           </a>
@@ -26,7 +28,7 @@
                     {{#if TripStarted}}
                     <button key="ButtonFinishTrip" @click="finishTrip" class="col button button-fill button-big color-red ">{{@global.LANGUAGE.COM_MSG06}}</button>
                     {{else}}
-                    <button key="ButtonStartQuestions" @click="getQuestions" class="col button button-fill button-big color-green ">{{@global.LANGUAGE.COM_MSG05}}</button>
+                    <button key="ButtonStartQuestions" @click="goToQuestions" class="col button button-fill button-big color-green ">{{@global.LANGUAGE.COM_MSG05}}</button>
                     {{/if}} 
                 </div>
             </div>
@@ -76,30 +78,44 @@
                 {{else}}
 
                 <div key="BlockSelectChecklist" class="list no-hairlines">
-                    <ul>                        
-                        <li class="item-content item-input ">
-                            <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-asset"></i></div>
-                            <div class="item-inner">
-                                <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG01}}</div>
-                                <div class="item-input-wrap input-dropdown-wrap">
-                                  <select name="asset" placeholder="Please choose..." >
-                                    <option value="Asset1">Asset1</option>
-                                    <option value="Asset2">Asset2</option>
-                                  </select>
+                    <ul>
+                        <li>
+                            <a
+                                    key="key-asset-list"
+                                    class="item-link smart-select custom-smart-select smart-select-asset-list"
+                            >
+                                <select name="asset"  >
+                                    {{#AssetList}}
+                                    <option value="{{IMEI}}" >{{Name}}</option>
+                                    {{/AssetList}}
+                                </select>
+                                <div class="item-content item-input">
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-font icon-other-asset"></i>
+                                    </div>
+                                    <div class="item-inner ">
+                                        <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG01}}</div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </li>
-                        <li class="item-content item-input ">
-                            <div class="item-media text-color-gray"><i class="f7-icons icon-font icon-other-checklist"></i></div>
-                            <div class="item-inner">
-                                <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG02}}</div>
-                                <div class="item-input-wrap input-dropdown-wrap">
-                                  <select name="checklist" placeholder="Please choose...">
-                                    <option value="checklist1">checklist1</option>
-                                    <option value="checklist2">checklist2</option>
-                                  </select>
+
+                        <li>
+                            <a class="item-link smart-select custom-smart-select smart-select-check-list" >
+                                <select name="checklist">
+                                    {{#CheckList}}
+                                    <option value="{{Code}}" >{{Name}}</option>
+                                    {{/CheckList}}
+                                </select>
+                                <div class="item-content item-input">
+                                    <div class="item-media text-color-gray">
+                                        <i class="f7-icons icon-font icon-other-checklist"></i>
+                                    </div>
+                                    <div class="item-inner ">
+                                        <div class="item-title item-label">{{@global.LANGUAGE.HOME_MSG02}}</div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </li>
                         <li class="item-content">
                             <div class="item-inner">
@@ -118,24 +134,7 @@
                     </ul>                                        
                 </div>
 
-                <div class="block">
-                    <div class="row">
-                        <div class="button col" @click="showLocation">
-                            Get Location
-                        </div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="button col" @click="startTracking">
-                            Start Tracking
-                        </div>
-                        <div class="button col" @click="stopTracking">
-                            Stop Tracking
-                        </div>
-                    </div>
-                    
-                </div>
-                
+
 
                 {{/if}}
 
@@ -153,89 +152,140 @@
     return {
         data: function () {
             var self = this;
-            var ret = {};            
+
+            let assetList = self.$app.methods.getFromStorage('assetList');
+            let checkList = self.$app.methods.getFromStorage('checkList');
+
+            let additionalFlags = self.$app.methods.getFromStorage('additionalFlags');
+            var ret = {
+                AssetList: assetList,
+                CheckList: checkList,
+                Trip: additionalFlags.Trip
+            };
             //app.methods.storageSetupTime();
 
-            ret.TripStarted = self.$app.methods.getBooleanVal(localStorage.TripStarted);
+            ret.TripStarted = additionalFlags.TripStarted;
 
             return ret;
         },
         methods: {
-            showLocation: function(){
-                if (BackgroundGeolocation) {
-                    BackgroundGeolocation.getCurrentLocation(function(location){
-                        alert(JSON.stringify(location));
-                    }, function(code, message){
-                        alert(code, message);
-                    }, 
-                    {
-                        timeout: 10000
+            userSignedIn(params){
+                //console.log('here')
+                this.$setState({
+                    AssetList: params.Devices,
+                    CheckList: params.CheckList
+                },()=>{
+                    this.initAssetList()
+                    this.initCheckList()
+                })
+            },
+            tripStatusChanged(params){
+                if (params.TripStarted) {
+                    console.log('here')
+                    this.$setState({
+                        TripStarted: params.TripStarted,
+                        Trip: params.Trip
+                    }, ()=>{
+                        console.log('updated')
                     });
                 }else{
-                    alert('BackgroundGeolocation plugin not found');
-                }
-            },
-            startTracking: function(){
-                if (BackgroundGeolocation) {
-                    BackgroundGeolocation.checkStatus(function(status) {
-                        console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
-                        console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
-                        console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
-                     
-                        // you don't need to check status before start (this is just the example)
-                        if (!status.isRunning) {
-                            BackgroundGeolocation.start(); //triggers start on start event
-                        }
+                    this.$setState({
+                        TripStarted: params.TripStarted,
+                    }, ()=>{
+                        this.initAssetList();
+                        this.initCheckList();
                     });
                 }
-                    
             },
-            stopTracking: function(){
-                if (BackgroundGeolocation) {
-                    BackgroundGeolocation.stop();                    
-                } 
-            },
-            getQuestions: function(){
-                var self = this; 
 
-                /*app.dialog.progress();
-                app.request.get(API_URL.GET_QUESTIONS, {}, function (data, xhr, status) {  
+            initAssetList(){
+                if(this.AssetListSelect){
+                    this.AssetListSelect.destroy();
+                }
+                let listEl = this.$el.find('.smart-select-asset-list');
+                if(listEl.length){
+                    this.AssetListSelect = this.$app.smartSelect.create({
+                        el: listEl,
+                        openIn: 'popup',
+                        formColorTheme: 'red',
+                        //popupPush: true,
+                        searchbar: true,
+                        searchbarPlaceholder: LANGUAGE.COM_MSG13,
+                        appendSearchbarNotFound: LANGUAGE.PROMPT_MSG009,
+                        //pageTitle: LANGUAGE.COM_MSG065,
+                        /* on: {
+							 change: function (smartSelect, val) {
+								 self.updateGroupMarkers(val);
+							 }
+						 }*/
+                    });
+                }
+            },
+            initCheckList(){
+                if(this.CheckListSelect){
+                    this.CheckListSelect.destroy();
+                }
+                let listEl = this.$el.find('.smart-select-check-list');
+                if(listEl.length){
+                    this.CheckListSelect = this.$app.smartSelect.create({
+                        el: listEl,
+                        openIn: 'popup',
+                        formColorTheme: 'red',
+                        //popupPush: true,
+                        searchbar: true,
+                        searchbarPlaceholder: LANGUAGE.COM_MSG13,
+                        appendSearchbarNotFound: LANGUAGE.PROMPT_MSG009,
+                        //pageTitle: LANGUAGE.COM_MSG065,
+                        /* on: {
+							 change: function (smartSelect, val) {
+								 self.updateGroupMarkers(val);
+							 }
+						 }*/
+                    });
+                }
+            },
+            /*getCheckLists(){
+                /!*app.dialog.progress();
+                app.request.get(API_URL.GET_QUESTIONS, {}, function (data, xhr, status) {
                     console.log(data);
 
                     app.dialog.close();
                 },
-                function (xhr, status) {            
+                function (xhr, status) {
                     app.dialog.close();
                     //app.dialog.alert('Error occurred during get categories request!');
-                    app.dialog.alert('Error occured');             
+                    app.dialog.alert('Error occured');
                 },
-                'json');  */  
-
-                var questions = [        
+                'json');  *!/
+                let checkLists = [
                     {
-                        question: 'Check engine oil level, coolant level, washer water level, fuel level in tanks',
-                        images: '',
-                    },
-                    {
-                        question: 'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
-                        images: ['http://oi67.tinypic.com/2evyh3k.jpg','http://oi64.tinypic.com/2eamloy.jpg'],
-                    },
-                    {
-                        question: 'Check cab entry/exit steps & handles - check seats and seat belts',
-                        images: ['http://oi64.tinypic.com/2eamloy.jpg'],
-                    },
-                    {
-                        question: 'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
-                        images: [],
-                    },
-                    {
-                        question: 'Check registration is current',
-                        images: ['http://oi64.tinypic.com/2eamloy.jpg'],
-                    },
-                   
+                        Id: 1,
+                        Name: 'Check List 1',
+                        Questions: [
+                            {
+                                question: 'Check engine oil level, coolant level, washer water level, fuel level in tanks',
+                                images: '',
+                            },
+                            {
+                                question: 'Visually check for fluid leaks of oil, coolant, fuel, brake/clutch fluid (if applicable)',
+                                images: ['http://oi67.tinypic.com/2evyh3k.jpg','http://oi64.tinypic.com/2eamloy.jpg'],
+                            },
+                            {
+                                question: 'Check cab entry/exit steps & handles - check seats and seat belts',
+                                images: ['http://oi64.tinypic.com/2eamloy.jpg'],
+                            },
+                            {
+                                question: 'Start engine - check oil pressure, warm up engine, build up air pressure. Check instruments, gauges, brake failure, indicators & dash controls.',
+                                images: [],
+                            },
+                            {
+                                question: 'Check registration is current',
+                                images: ['http://oi64.tinypic.com/2eamloy.jpg'],
+                            },
+                        ]
+                    }
                 ];
-
-                /*
+                /!*
                     'Drain condensation & contamination from all air tanks',
                     'Check triangles & safety kit (first aid) are on/in the vehicle',
                     'Check all tyres for tread, damage & inflation - including spares',
@@ -250,125 +300,74 @@
                     'ug test to ensure secure truck/trailer connection',
                     'When commenced driving apply brakes at low speed to ensure operation & release',
                     'Check Service Sticker is not overdue',
-                */
+                *!/
 
-                
-                //var questions = [];
+                this.$app.methods.setInStorage({
+                    name: 'checkList',
+                    data: checkLists
+                });
 
-                if (questions && questions.length) {
-                    for (var i = questions.length - 1; i >= 0; i--) {
-                        if (questions[i].images && questions[i].images.length === 0) {
-                            questions[i].images = '';
-                        }                        
-                    }
-                }else{
-                    questions = '';
+                this.$setState({
+                    CheckList: checkLists
+                }, ()=>{
+                    console.log(checkLists)
+                    this.initCheckList()
+                })
+            },*/
+
+            goToQuestions: function(){
+                if(!this.CheckListSelect.getValue()){
+                    this.$app.methods.customDialog({text: LANGUAGE.PROMPT_MSG010})
+                    return;
                 }
-             
+                if(!this.AssetListSelect.getValue()){
+                    this.$app.methods.customDialog({text: LANGUAGE.PROMPT_MSG011})
+                    return;
+                }
                 var params = {
-                    Name: 'Asset3',
-                    Questions: questions
+                    CheckListCode: this.CheckListSelect.getValue(),
+                    IMEI: this.AssetListSelect.getValue(),
+
                 };
 
-                mainView.router.navigate('/questions/', { context: params } );
-
+                this.$app.view.main.router.navigate('/questions/', { context: params } );
             }, 
             finishTrip: function(){
                 var self = this; 
 
                 var params = {};
 
-                mainView.router.navigate('/trip-info/8/Asset3/', { context: params } );
-                localStorage.TripStarted = 0;
-            },
-           /* getHotels: function (virtualList) {
-                var self = this; 
-
-                var hotels = app.methods.getFromStorage('hotels');
-
-                if (hotels && hotels.length > 0) {
-                    self.prepareFilters(hotels);
-                    if (virtualList.items.length === 0) {
-                        virtualList.appendItems(hotels);
-                    }else{
-                        virtualList.replaceAllItems(hotels);
-                    }
-                }else{   
-                    app.dialog.progress();
-                    app.request.get(API_URL.GET_HOTELS, {}, function (data, xhr, status) {  
-                        //console.log(data);
-
-                        app.methods.setInStorage({
-                            name: 'hotels',
-                            data: data
-                        });
-
-                        self.prepareFilters(data);
-
-                        if (virtualList.items.length === 0) {
-                            virtualList.appendItems(data);
-                        }else{
-                            virtualList.replaceAllItems(data);
-                        }
-
-                        app.dialog.close();
-                    },
-                    function (xhr, status) {            
-                        app.dialog.close();
-                        //app.dialog.alert('Error occurred during get categories request!');
-                        app.dialog.alert('Error occured');             
-                    },
-                    'json');    
+                let obj = {
+                    TripStarted: false
                 }
-                
-                    
-            },*/
+                self.$app.methods.setInStorage({name: 'additionalFlags', data: obj});
+                self.$app.view.main.router.navigate('/trip-info/8/Asset3/', { context: params } );
+                AppEvents.emit('tripStatusChanged', obj);
+
+                //localStorage.TripStarted = 0;
+            },
+
         },
        
         on: {
             pageInit: function (e, page) { 
-                var self = this;   
-                
-               
-                /*if (localStorage.ACCOUNT) {
-                    self.$app.methods.login();
-                }else{
-                    self.$app.methods.logout();
-                }*/
-               
-                
-            },     
-            pageAfterOut: function () {
-                // page has left the view
-            },
-            pageBeforeIn: function(){
-                var self = this;  
-                var tripStarted = self.$app.methods.getBooleanVal(localStorage.TripStarted);
+                var self = this;
 
-                if (tripStarted) {
-                    self.$setState({
-                        TripStarted: tripStarted,
-                        Trip: {
-                            AssetName: 'Asset3',
-                            StartTime: '20/10/2018 12:34:45',
-                        }
-                    });
-                }else{
-                    self.$setState({
-                        TripStarted: tripStarted,
-                    });
+                AppEvents.on('signedIn', self.userSignedIn);
+                AppEvents.on('tripStatusChanged', self.tripStatusChanged);
+
+                if(!self.TripStarted){
+                    this.initAssetList();
+                    this.initCheckList();
                 }
-                
-                    
-            },
-            pageAfterIn: function(e, page) {
-                
-               // console.log('here');
-                //if (1) {
-                    
-                //}else{
 
-                //}
+                
+            },
+            pageBeforeRemove: function () {
+                AppEvents.off('signedIn', this.userSignedIn);
+                if(this.AssetListSelect) this.AssetListSelect.destroy();
+                if(this.CheckListSelect) this.CheckListSelect.destroy();
+
                 
             }
         }
