@@ -285,8 +285,8 @@
                     on: {
                         opened: function (popup) {
                             popup.$el.find('.showUploadPhotoOptions').on('click', function (e) {
-                                //self.showUploadPhotoOptions();
-                                self.loadEditImageModal()
+                                self.showUploadPhotoOptions();
+                                //self.loadEditImageModal()
                             })
                             popup.$el.find('.faultForm').on('submit', function(e){
                                 e.preventDefault();
