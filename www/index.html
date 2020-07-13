@@ -1,111 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  <!--
+  Customize this policy to fit your own app's needs. For more guidance, see:
+      https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+  Some notes:
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+      * Enable inline JS: add 'unsafe-inline' to default-src
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
 
-    <meta http-equiv="Content-Security-Policy" content="default-src * gap://ready file:; font-src 'self' data:; media-src *; img-src * 'self' data:; style-src 'self' http://* https://* 'unsafe-inline' *; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval' *" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="theme-color" content="#333">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <title>PreStart</title>
+  <meta name="theme-color" content="#007aff">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <title>PreStart</title>
   
-    <link rel="stylesheet" href="resources/libraries/framework7/normalize.min.css">
-    <link rel="stylesheet" href="resources/libraries/framework7/framework7.bundle.min.css">
-    <link rel="stylesheet" href="resources/libraries/leaflet/leaflet.css">
-    <!-- Cropper Camer -->
-    <link rel="stylesheet" href="resources/plugins/cropper/css/cropper.min.css" type="text/css" charset="utf-8"/>
-    
-    <link rel="stylesheet" href="resources/fonts/fontastic/styles.css">
-    <link rel="stylesheet" href="resources/app/framework7-icons.css"> 
-    <link rel="stylesheet" href="resources/app/icons.css">   
-    <link rel="stylesheet" href="resources/app/app.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="static/icons/apple-touch-icon.png">
+  <link rel="icon" href="static/icons/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- built styles file will be auto injected -->
 </head>
-<body class="theme-dark color-theme-red theme-dealer">
-    <div id="app">
-        <!-- Status bar overlay for fullscreen mode-->
-        <div class="statusbar"></div>
-        
-        <!-- Your main view, should have "view-main" class -->
-        <div class="view view-main ios-edges">
-          
-        </div>
-
-        <script id="loginScreenTemplate" type="text/template7">
-            <div class="login-screen">
-                <!--<div class="view">-->
-                <div class="page">
-                    <div class="page-content login-screen-content ">
-                        <div class="login-screen-title padding-horizontal logo">
-                            <img src="resources/images/logo.png" alt="">
-                        </div>
-                        <form name="login-form" class="login-form">
-                            <div class="list color-green no-hairlines no-hairlines-between " >
-                                <ul>
-                                    <li class="item-content item-input item-input-outline">
-                                        <div class="item-inner">
-                                            <div class="item-input-wrap">
-                                                <input type="text" name="username" placeholder="{{@global.LANGUAGE.LOGIN_MSG02}}" required validate>
-                                                <span class="input-clear-button"></span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input item-input-outline">
-                                        <div class="item-inner">
-                                            <div class="item-input-wrap">
-                                                <input type="password" name="password" placeholder="{{@global.LANGUAGE.LOGIN_MSG03}}" required validate>
-                                                <span class="input-clear-button password-clear-button"></span>
-                                                <span class="password-toggle text-color-gray"><i class="f7-icons icon-other-password "></i></span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!--<li class="text-align-right">
-                                        <a href="/forgot-password/" class="text-color-white margin-right text-decoration-underline">{{@global.LANGUAGE.LOGIN_MSG03}}</a>
-                                    </li>-->
-                                </ul>
-                            </div>
-                            <div class="list">
-                                <ul>
-                                    <li class="padding-horizontal">
-                                        <button type="submit" class="button button-fill button-large color-custom">{{@global.LANGUAGE.LOGIN_MSG04}}</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!--</div>-->
-            </div>
-        </script>
-
-    </div>
-    
-  <!-- Cordova -->
-  <script src="cordova.js"></script>
-
-  <!-- Framework7 library -->
-  <script src="resources/libraries/framework7/framework7.bundle.min.js"></script>
+<body>
+  <div id="app"></div>
   
-  <script type="text/javascript" src="resources/libraries/jquery/jquery-3.3.1.min.js"></script>
-    <!-- Moment -->
-    <script type="text/javascript" src="resources/libraries/moment/moment.min.js" ></script>
-    <script type="text/javascript" src="resources/libraries/moment/moment-duration-format.js" ></script>
-    <script type="text/javascript" src="resources/libraries/moment/moment-timezone-with-data-10-year-range.min.js" ></script>
-  
-  <script type="text/javascript" src="resources/libraries/leaflet/leaflet.js"></script>
-    <!-- Cropper Camera -->
-    <script type="text/javascript" src="resources/plugins/cropper/js/cropper.min.js"></script>
-
-  <!-- Language Pack -->
-  <script type="text/javascript" src="resources/app/languages.js" ></script>
-
-  <!-- App routes -->
-  <script src="resources/app/routes.js"></script>
-
-  <!-- Your custom app scripts -->
-  <script src="resources/app/app.js?v=1.1"></script>
-  
-</body>
+  <!-- built script files will be auto injected -->
+<script src="js/app.js"></script></body>
 </html>
